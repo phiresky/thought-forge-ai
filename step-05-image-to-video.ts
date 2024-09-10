@@ -106,7 +106,7 @@ async function process(props: P, util: WriteUtil) {
         .setTimeout(timeout)
         .fill(props.RUNWAY_PASSWORD);
     }
-    await sleep(5000);
+    await sleep(2000);
     {
       const targetPage = page;
       await Locator.race([
@@ -187,7 +187,7 @@ async function process(props: P, util: WriteUtil) {
   {
     const targetPage = page;
     await Locator.race([
-      targetPage.locator("button::-p-text(Generate)"),
+      targetPage.locator("button:not([disabled])::-p-text(Generate)"),
       targetPage.locator(
         "div.GenVideoNextUIV1PanelGroup__panelContainer__hmb9i > div.Base__Box-sc-thne2y-0 > div span > span"
       ),
@@ -246,7 +246,7 @@ export async function step05ImageToVideo(
       return {};
     }
   );
-  console.log(result);
+  return result;
 }
 async function sleep(ms: number) {
   return await new Promise((resolve) => setTimeout(resolve, ms));

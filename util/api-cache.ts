@@ -19,6 +19,7 @@ async function digestMessage(message: string): Promise<string> {
   return hashHex;
 }
 export type WriteUtil = {
+  cachePrefix: string;
   writeCompanion: (
     filename: string,
     data: string | Uint8Array
@@ -41,6 +42,7 @@ export async function apiFromCacheOr<T>(
     // could not read cache, continue
   }
   const response = await call({
+    cachePrefix,
     async writeCompanion(filename: string, data: string | Uint8Array) {
       await fs.writeFile(cachePrefix + filename, data);
     },

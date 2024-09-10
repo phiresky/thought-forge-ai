@@ -2,7 +2,7 @@ import { ElevenLabsClient, ElevenLabs } from "elevenlabs";
 import { CacheOrComputer } from "./util/api-cache";
 import { StatsCounter } from "./util/stats";
 
-type TTSResponse = {
+export type TTSResponse = {
   audio_base64: string;
   alignment: {
     characters: string[];
@@ -57,6 +57,5 @@ export async function step02TextToSpeech(
     await util.writeCompanion("-audio.mp3", Buffer.from(resp.audio_base64, "base64"));
     return resp;
   });
-  console.log(r);
   return r;
 }

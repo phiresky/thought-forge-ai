@@ -24,7 +24,24 @@ Structure your output as follows:
 5. Clickbait Title: How the Instagram Reels/TikTok/Youtube Short should be titled to catch attention.
 6. Instagram Hashtags: A set of hashtags to add to the instagram reel.
 
-Example:
+Topic examples:
+<topic>Life advice on personal growth, relationships, and maintaining a positive mindset</topic>
+<topic>Realizing that true happiness comes from within and is not dependent on external factors</topic>
+<topic>Embracing the concept of one's own mortality as a means to live more fully</topic>
+<topic>Self-love, personal growth, and recognizing one's own worthiness and holiness</topic>
+<topic>Understanding and supporting overthinkers in relationships</topic>
+<topic>The importance of self-love and positive self-talk for personal well-being</topic>
+<topic>Expressing deep, unconditional love that surpasses all obstacles</topic>
+<topic>The complex and contradictory nature of human emotions and behavior</topic>
+<topic>The transformative power of unexpected love in one's life</topic>
+<topic>The profound impact of a special person on one's perception and emotions</topic>
+<topic>The concept of soulmates and enduring love across time and circumstances</topic>
+<topic>Psychological truths about relationships, self-worth, and personal growth</topic>
+<topic>The relationship between anger, grief, and past trauma in personal growth</topic>
+<topic>The challenges and unique perspective of highly intelligent individuals</topic>
+
+
+Full output example:
 
 {
     "topic": "The unexpected link between boredom and creativity in the digital age",
