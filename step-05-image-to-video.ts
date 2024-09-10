@@ -1,7 +1,8 @@
 import puppeteer, { Locator } from "puppeteer";
 import { CacheOrComputer, WriteUtil } from "./util/api-cache";
 import { setTimeout } from "timers";
-import  p from "node:process";
+import p from "node:process";
+import { sleep } from "./util";
 
 type P = {
   RUNWAY_USERNAME: string;
@@ -12,16 +13,19 @@ type P = {
   imageFilePath: string;
 };
 async function process(props: P, util: WriteUtil) {
-  const browser = await puppeteer.launch({ headless: false, protocolTimeout: 30 * 60 * 1000 });
+  const browser = await puppeteer.launch({
+    headless: false,
+    protocolTimeout: 30 * 60 * 1000,
+  });
   const page = await browser.newPage();
   const timeout = 50000;
   page.setDefaultTimeout(timeout);
-  if(props.RUNWAY_TOKEN) {
+  if (props.RUNWAY_TOKEN) {
     await page.evaluateOnNewDocument((token) => {
       localStorage.setItem("RW_USER_TOKEN", token);
     }, props.RUNWAY_TOKEN);
   }
-  if(props.RUNWAY_COOKIE) {
+  if (props.RUNWAY_COOKIE) {
     const cookies = JSON.parse(props.RUNWAY_COOKIE);
     await page.setCookie(...cookies);
   }
@@ -127,7 +131,10 @@ async function process(props: P, util: WriteUtil) {
     }
     await page.waitForNavigation();
     console.log("puppeteer cookies", await page.cookies());
-    console.log("puppeteer token", await page.evaluate(() => localStorage.getItem("RW_USER_TOKEN")))
+    console.log(
+      "puppeteer token",
+      await page.evaluate(() => localStorage.getItem("RW_USER_TOKEN"))
+    );
   }
   {
     const targetPage = page;
@@ -188,17 +195,8 @@ async function process(props: P, util: WriteUtil) {
     const targetPage = page;
     await Locator.race([
       targetPage.locator("button:not([disabled])::-p-text(Generate)"),
-      targetPage.locator(
-        "div.GenVideoNextUIV1PanelGroup__panelContainer__hmb9i > div.Base__Box-sc-thne2y-0 > div span > span"
-      ),
-      targetPage.locator(
-        '::-p-xpath(//*[@id=\\"data-panel-id-1\\"]/div[1]/div/div/div/div[2]/div[2]/div/div/button/span/span)'
-      ),
-      targetPage.locator(
-        ":scope >>> div.GenVideoNextUIV1PanelGroup__panelContainer__hmb9i > div.Base__Box-sc-thne2y-0 > div span > span"
-      ),
     ])
-      .setTimeout(timeout)
+      .setTimeout(30 * 60 * 1000)
       .click({
         offset: {
           x: 44.1875,
@@ -206,11 +204,32 @@ async function process(props: P, util: WriteUtil) {
         },
       });
   }
-  console.log("waiting for video");
-  const vid = await page.waitForSelector("video source", {
-    timeout: 30 * 60 * 1000,
-  });
-  if (!vid) throw Error("video not found");
+  console.log("pushed generate, waiting for video");
+  let vid;
+  // Content error
+  while (true) {
+    try {
+      vid = await page.waitForSelector("video source", {
+        timeout: 60 * 1000,
+      });
+      if (!vid) throw Error("video not found");
+      break;
+    } catch (e) {
+      const ele = await page.$("[class*=ProgressBar__percentage]");
+      if (ele) {
+        const text = await ele.evaluate((el) => el.textContent);
+        console.log("video not ready(?)", "status", text);
+        continue;
+      }
+      const res = await page.$("::-p-aria(Content error)");
+      if (res) {
+        console.error("content error, they refused to generate");
+        // throw Error("content error, they refused to generate");
+        continue;
+      }
+      console.error("no readyness element found, probably need to press gen button (again)");
+    }
+  }
   const src = await vid.evaluate((el: HTMLSourceElement) => el.src);
   const ab = await fetch(src).then((res) => res.arrayBuffer());
   await util.writeCompanion("-vid.mp4", new Uint8Array(ab));
@@ -225,7 +244,8 @@ export async function step05ImageToVideo(
     RUNWAY_PASSWORD?: string;
   },
   prompt: string,
-  imageFilePath: string
+  imageFilePath: string,
+  preSleep: () => Promise<void>
 ) {
   if (!config.RUNWAY_PASSWORD || !config.RUNWAY_USERNAME)
     throw Error("no RUNWAY_PASSWORD or RUNWAY_USERNAME");
@@ -242,12 +262,10 @@ export async function step05ImageToVideo(
     `https://app.runwayml.com/...`,
     input,
     async (util) => {
+      await preSleep();
       const result = await process(full, util);
       return {};
     }
   );
   return result;
-}
-async function sleep(ms: number) {
-  return await new Promise((resolve) => setTimeout(resolve, ms));
 }

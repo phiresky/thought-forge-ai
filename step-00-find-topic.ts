@@ -4,7 +4,7 @@ import { StatsCounter } from "./util/stats";
 import { MessageCreateParamsNonStreaming } from "@anthropic-ai/sdk/resources";
 
 const SYSTEM_PROMPT = `
-You are tasked with generating a topic for a deep, insightful TikTok-style short video that resonates with many people but has a specific insight. This topic should be suitable for creating engaging, thought-provoking content that can capture viewers' attention quickly and leave a lasting impression.
+You are tasked with generating 10 topics for deep, insightful TikTok-style short video that resonates with many people but has a specific insight. This topic should be suitable for creating engaging, thought-provoking content that can capture viewers' attention quickly and leave a lasting impression.
 
 Guidelines for generating the TikTok topic:
 
@@ -41,16 +41,16 @@ Topic examples:
 <topic>The challenges and unique perspective of highly intelligent individuals</topic>
 
 
-Full output example:
+Output 10 different topics. Output example:
 
-{
+[{
     "topic": "The unexpected link between boredom and creativity in the digital age",
     "key_insight": "Constant digital stimulation may be hindering our ability to tap into the creative potential that comes from embracing boredom",
     "relevance": "In an era of smartphones and endless entertainment options, many people rarely experience true boredom. This constant engagement may be impacting our ability to think creatively and generate novel ideas, which are crucial skills in both personal and professional contexts.",
     "potential_impact": "This topic could inspire viewers to intentionally disconnect from digital devices and embrace moments of boredom, potentially unlocking new levels of creativity and problem-solving abilities.",
     "clickbait_title": "Bored? Embrace it.",
     "instagram_hashtags": "#deepmindthoughts #deepthoughtswithhuggybear #deepthoughtsatnight #yqdeepthoughts #dork #sadmood #hatersgonnahate #writerslife #thoughtsoftheday #brokenfeelings #wordsforthought #2amthoughts #turnaround #disappointment #sadthoughts #beautifulmind #braveheart #vulnerable #britishmuseum #philosophyquotes #philosophers #quotesofinsta #wordsmiths #masculinewomen #dailyperspective"
-}`;
+}, ...]`;
 
 export type FindTopicAiResponse = {
   topic: string;
@@ -64,13 +64,14 @@ export type FindTopicAiResponse = {
 export async function step00FindTopic(
   apiFromCacheOr: CacheOrComputer,
   config: { ANTHROPIC_API_KEY?: string; ANTHROPIC_MODEL?: string },
-  statsCounter: StatsCounter
-): Promise<FindTopicAiResponse> {
+  statsCounter: StatsCounter,
+  seed: number
+): Promise<FindTopicAiResponse[]> {
   const key = config.ANTHROPIC_API_KEY;
   if (!key || !config.ANTHROPIC_MODEL) throw Error("no ANTHROPIC_API_KEY");
   const anthropic = new Anthropic({ apiKey: key });
   const model = config.ANTHROPIC_MODEL;
-  const body: MessageCreateParamsNonStreaming = {
+  const body: MessageCreateParamsNonStreaming & { seed: number } = {
     model,
     max_tokens: 4096,
     // temperature: 0,
@@ -87,16 +88,18 @@ export async function step00FindTopic(
       },
       {
         role: "assistant",
-        content: [{ type: "text", text: "{" }],
+        content: [{ type: "text", text: "[" }],
       },
     ],
+    seed,
   };
   const msg = (
     await apiFromCacheOr(
       "https://fakeurl.anthropic.com/anthropic.messages.create",
       body,
       async () => {
-        const msg = await anthropic.messages.create(body);
+        const { seed, ...bodey } = body;
+        const msg = await anthropic.messages.create(bodey);
         return msg;
       }
     )
@@ -106,5 +109,5 @@ export async function step00FindTopic(
   statsCounter.output_tokens += msg.usage.output_tokens;
   console.assert(msg.content.length === 1);
   if (!(msg.content[0].type === "text")) throw Error("unexpected message type");
-  return JSON.parse("{" + msg.content[0].text);
+  return JSON.parse("[" + msg.content[0].text);
 }
