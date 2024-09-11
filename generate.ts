@@ -81,9 +81,17 @@ async function main() {
   );
   console.timeEnd("image prompts");
 
+  const pauseAfterSeconds = 1;
   const [videoAlignments, music] = await Promise.all([
-    doVideo(projectDir, config, monologue, speech, iprompts),
-    doMusic(speech, monologue, projectDir, config, statsCounter),
+    doVideo(projectDir, config, monologue, speech, iprompts, pauseAfterSeconds),
+    doMusic(
+      speech,
+      monologue,
+      projectDir,
+      config,
+      statsCounter,
+      pauseAfterSeconds
+    ),
   ]);
 
   const res = await step08ffmpeg(apiFromCacheOr, {
@@ -101,9 +109,15 @@ async function doVideo(
   config: Config,
   monologue: string,
   speech: TTSResponseFinal,
-  iprompts: {text: string, prompt: string}[]
+  iprompts: { text: string; prompt: string }[],
+  pauseAfterSeconds: number
 ) {
-  const alignment = alignSpeech(monologue, speech.data, iprompts);
+  const alignment = alignSpeech(
+    monologue,
+    speech.data,
+    iprompts,
+    pauseAfterSeconds
+  );
   for (const prompt of alignment) {
     const img = await step04TextToImage(apiFromCacheOr, config, prompt.prompt);
     await fs.copyFile(
@@ -136,10 +150,13 @@ async function doMusic(
   monologue: string,
   projectDir: string,
   config: Config,
-  statsCounter: StatsCounter
+  statsCounter: StatsCounter,
+  pauseAfterSeconds: number
 ) {
   const musicDuration =
-    speech.data.alignment.character_end_times_seconds.slice(-1)[0];
+    speech.data.alignment.character_end_times_seconds.slice(-1)[0] +
+    pauseAfterSeconds;
+    console.log("music duration", musicDuration);
   const musicPrompt = await step06TextToMusicPrompt(
     apiFromCacheOr,
     config,

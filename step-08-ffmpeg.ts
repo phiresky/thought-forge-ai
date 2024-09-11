@@ -12,7 +12,7 @@ async function getLoudnessTarget(
     "-i",
     fileName,
     "-af",
-    `loudnorm=I=${p.i}:LRA=${p.lra}:TP=${p.tp}:print_format=json`,
+    `loudnorm=I=${p.i}:LRA=${p.lra}:TP=${p.tp}:print_format=json:dual_mono=true`,
     "-f",
     "null",
     "-",
@@ -33,7 +33,7 @@ async function getLoudnessTarget(
     normalization_type: "dynamic";
     target_offset: "-0.49";
   };
-  return `loudnorm=I=${p.i}:LRA=${p.lra}:TP=${p.tp}:measured_I=${res.input_i}:measured_LRA=${res.input_lra}:measured_TP=${res.input_tp}:measured_thresh=${res.input_thresh}:offset=${res.target_offset}:linear=true:print_format=json`;
+  return `loudnorm=I=${p.i}:LRA=${p.lra}:TP=${p.tp}:measured_I=${res.input_i}:measured_LRA=${res.input_lra}:measured_TP=${res.input_tp}:measured_thresh=${res.input_thresh}:offset=${res.target_offset}:linear=true:print_format=json:dual_mono=true`;
 }
 export async function step06ffmpeg(
   apiFromCacheOr: CacheOrComputer,
@@ -47,6 +47,7 @@ export async function step06ffmpeg(
     `local:ffmpeg-merge`,
     data,
     async (util) => {
+      // https://k.ylo.ph/2016/04/04/loudnorm.html
       const speechLoudness = await getLoudnessTarget(data.speech, {
         i: -16,
         lra: 11,
@@ -58,6 +59,7 @@ export async function step06ffmpeg(
         tp: -2,
       });
       const audioCount = 2;
+      const fadeOutStart = data.alignment.slice(-1)[0].endSeconds - 1;
       let filter = data.alignment
         .map((e, i) => {
           const length = e.endSeconds - e.startSeconds;
@@ -79,13 +81,16 @@ export async function step06ffmpeg(
         "-filter_complex",
         filter,
         "-filter_complex",
-        `[0:a]${speechLoudness}[speech];[1:a]${musicLoudness}[music]; [speech][music]amix=inputs=2[audio]`,
+        // need to make the speech stereo first otherwise output will be mono
+        `[0:a][0:a]amerge=inputs=2[spmono]; [spmono]${speechLoudness}[speech]; [1:a]${musicLoudness}[music]; [speech][music]amix=inputs=2,afade=type=out:start_time=${fadeOutStart}:duration=1[audio]`,
         "-map",
         "[video]",
         "-map",
         "[audio]",
         "-crf",
-        "21",
+        "20",
+        // ffmpeg does not want to copy input frame rate from a concat filter i guess
+        "-r", "24", // -fps_mode passthrough
         util.cachePrefix + "-merged.mp4",
       ];
       console.log(cli);

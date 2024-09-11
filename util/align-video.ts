@@ -17,7 +17,8 @@ export type ImageSpeechVideoAlignment = ImageSpeechAlignment & {
 export function alignSpeech(
   monologue: string,
   speech: TTSResponse,
-  prompts: { text: string; prompt: string }[]
+  prompts: { text: string; prompt: string }[],
+  secondsAfter: number,
 ) {
   const output: ImageSpeechAlignment[] = [];
   const alignment = { ...speech.alignment };
@@ -53,6 +54,7 @@ export function alignSpeech(
     alignment.character_end_times_seconds =
       alignment.character_end_times_seconds.slice(prompt.text.length);
   }
+  output[output.length - 1].endSeconds += secondsAfter;
   return output;
 }
 
