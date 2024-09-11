@@ -1,6 +1,7 @@
 import { ElevenLabsClient, ElevenLabs } from "elevenlabs";
-import { CacheOrComputer } from "./util/api-cache";
+import { CacheOrComputer, CacheResponse } from "./util/api-cache";
 import { StatsCounter } from "./util/stats";
+import { FindTopicAiResponse } from "./step-00-find-topic";
 
 export type TTSResponse = {
   audio_base64: string;
@@ -15,28 +16,36 @@ export type TTSResponse = {
     character_end_times_seconds: number[];
   };
 };
+export type TTSResponseFinal = CacheResponse<TTSResponse> & {
+  speechFileName: string;
+};
+
 export async function step02TextToSpeech(
   apiFromCacheOr: CacheOrComputer,
   config: {
     ELEVENLABS_API_KEY?: string;
     ELEVENLABS_MODEL?: string;
-    ELEVENLABS_VOICE?: string;
   },
   statsCounter: StatsCounter,
+  topic: FindTopicAiResponse,
   monologue: string
-) {
-  if (
-    !config.ELEVENLABS_API_KEY ||
-    !config.ELEVENLABS_VOICE ||
-    !config.ELEVENLABS_MODEL
-  )
+): Promise<TTSResponseFinal> {
+  if (!config.ELEVENLABS_API_KEY || !config.ELEVENLABS_MODEL)
     throw Error("no ELEVENLABS_API_KEY or ELEVENLABS_VOICE");
   const client = new ElevenLabsClient({ apiKey: config.ELEVENLABS_API_KEY });
+  const voice = {
+    ocean: "ddiq1IkwhtAlQgobNKtj",
+    benjamin: "LruHrtVF6PSyGItzMNHS",
+    stone: "NFG5qt843uXKj4pFvR7C",
+    cook: "3wZbmt7q1ZGa1v0w9nvu",
+    afriba: "mNOhSS5ycP9b0Evtoi2U",
+  }[topic.voice];
+  if (!voice) throw Error(`voice ${voice} not found`);
   const body: {
     voice: string;
     body: ElevenLabs.textToSpeech.TextToSpeechWithTimestampsRequest;
   } = {
-    voice: config.ELEVENLABS_VOICE,
+    voice,
     body: {
       // output_format: ElevenLabs.OutputFormat.Mp32205032,
       text: monologue,
@@ -50,12 +59,15 @@ export async function step02TextToSpeech(
     },
   };
   const r = await apiFromCacheOr("elevenlabs.io", body, async (util) => {
-    const resp = await client.textToSpeech.convertWithTimestamps(
+    const resp = (await client.textToSpeech.convertWithTimestamps(
       body.voice,
       body.body
-    ) as TTSResponse;
-    await util.writeCompanion("-audio.mp3", Buffer.from(resp.audio_base64, "base64"));
+    )) as TTSResponse;
+    await util.writeCompanion(
+      "-audio.mp3",
+      Buffer.from(resp.audio_base64, "base64")
+    );
     return resp;
   });
-  return r;
+  return { speechFileName: r.meta.cachePrefix + "-audio.mp3", ...r };
 }

@@ -1,0 +1,1 @@
+- add "keep it simple" to the image / video prompting

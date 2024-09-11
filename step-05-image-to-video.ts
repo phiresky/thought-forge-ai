@@ -1,4 +1,4 @@
-import puppeteer, { Locator } from "puppeteer";
+import puppeteer, { Locator, Page, Puppeteer } from "puppeteer";
 import { CacheOrComputer, WriteUtil } from "./util/api-cache";
 import { setTimeout } from "timers";
 import p from "node:process";
@@ -12,12 +12,19 @@ type P = {
   prompt: string;
   imageFilePath: string;
 };
-async function process(props: P, util: WriteUtil) {
+async function processA(props: P, util: WriteUtil) {
   const browser = await puppeteer.launch({
     headless: false,
     protocolTimeout: 30 * 60 * 1000,
   });
   const page = await browser.newPage();
+  try {
+    await processB(props, util, page);
+  } finally {
+    await browser.close();
+  }
+}
+async function processB(props: P, util: WriteUtil, page: Page) {
   const timeout = 50000;
   page.setDefaultTimeout(timeout);
   if (props.RUNWAY_TOKEN) {
@@ -130,7 +137,6 @@ async function process(props: P, util: WriteUtil) {
         });
     }
     await page.waitForNavigation();
-    console.log("puppeteer cookies", await page.cookies());
     console.log(
       "puppeteer token",
       await page.evaluate(() => localStorage.getItem("RW_USER_TOKEN"))
@@ -227,14 +233,26 @@ async function process(props: P, util: WriteUtil) {
         // throw Error("content error, they refused to generate");
         continue;
       }
-      console.error("no readyness element found, probably need to press gen button (again)");
+      console.error(
+        "no readyness element found, probably need to press gen button (again)",
+        props.prompt
+      );
+      const targetPage = page;
+      await Locator.race([
+        targetPage.locator("button:not([disabled])::-p-text(Generate)"),
+      ])
+        .setTimeout(30 * 60 * 1000)
+        .click({
+          offset: {
+            x: 44.1875,
+            y: 11,
+          },
+        });
     }
   }
   const src = await vid.evaluate((el: HTMLSourceElement) => el.src);
   const ab = await fetch(src).then((res) => res.arrayBuffer());
   await util.writeCompanion("-vid.mp4", new Uint8Array(ab));
-
-  await browser.close();
 }
 
 export async function step05ImageToVideo(
@@ -263,9 +281,9 @@ export async function step05ImageToVideo(
     input,
     async (util) => {
       await preSleep();
-      const result = await process(full, util);
+      const result = await processA(full, util);
       return {};
     }
   );
-  return result;
+  return { ...result, videoFilePath: result.meta.cachePrefix + "-vid.mp4" };
 }

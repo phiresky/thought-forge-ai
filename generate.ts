@@ -1,13 +1,25 @@
-import { step00FindTopic } from "./step-00-find-topic";
+import { step00FindTopic as step00FindTopics } from "./step-00-find-topic";
 import { step01WriteScript as step01WriteMonologue } from "./step-01-write-monologue";
-import { step02TextToSpeech, TTSResponse } from "./step-02-text-to-speech";
+import {
+  step02TextToSpeech,
+  TTSResponse,
+  TTSResponseFinal,
+} from "./step-02-text-to-speech";
 import { step03TextToImagePrompt } from "./step-03-text-to-image-prompt";
 import { step04TextToImage } from "./step-04-text-to-image";
 import { step05ImageToVideo } from "./step-05-image-to-video";
-import { step06ffmpeg } from "./step-06-ffmpeg";
+import { step07TextToMusicPrompt as step06TextToMusicPrompt } from "./step-06-text-to-music-prompt";
+import { step07music } from "./step-07-music";
+import { step06ffmpeg as step08ffmpeg } from "./step-08-ffmpeg";
 import { sleep } from "./util";
+import {
+  alignSpeech,
+  alignVideo,
+  ImageSpeechAlignment,
+  ImageSpeechVideoAlignment,
+} from "./util/align-video";
 import { apiFromCacheOr } from "./util/api-cache";
-import { zeroStatsCounter } from "./util/stats";
+import { StatsCounter, zeroStatsCounter } from "./util/stats";
 import "dotenv/config";
 import { promises as fs } from "fs";
 
@@ -17,20 +29,31 @@ function assertNonNull<T>(x: (T | null)[], e: string): asserts x is T[] {
 async function main() {
   const statsCounter = zeroStatsCounter();
   const config = process.env as any;
-  const seed = 1352242559; // (Math.random() * Number.MAX_SAFE_INTEGER) | 0;
-  const topics = await step00FindTopic(
+  const seed = 1352242560; // (Math.random() * Number.MAX_SAFE_INTEGER) | 0;
+  const topics = await step00FindTopics(
     apiFromCacheOr,
     config,
     statsCounter,
-    seed
+    seed,
+    20
   );
-  const topic = topics[0];
-  console.log(topic);
-  const projectDir = `data/${topic.clickbait_title}/`;
+  console.log(
+    "topics:",
+    topics
+      .map(
+        (p, i) => `Topic ${i}: ${p.clickbait_title} (${p.topic}) (${p.voice})`
+      )
+      .join("\n")
+  );
+  const choice = +process.argv[2];
+  if (isNaN(choice)) throw Error("no topic chosen");
+  const topic = topics[choice];
+  console.log("chosen topic", topic);
+  const projectDir = `data/${topic.clickbait_title.replace(/\//g, "")}/`;
   await fs.mkdir(projectDir, { recursive: true });
   await fs.writeFile(projectDir + "topic.json", JSON.stringify(topic, null, 2));
   await fs.writeFile(projectDir + "seed.json", JSON.stringify(seed, null, 2));
-
+  console.log("writing monologue");
   const monologue = await step01WriteMonologue(
     apiFromCacheOr,
     config,
@@ -38,131 +61,99 @@ async function main() {
     topic
   );
   await fs.writeFile(projectDir + "monologue.txt", monologue);
+  console.log("monologue", monologue);
+  console.time("tts");
   const speech = await step02TextToSpeech(
     apiFromCacheOr,
     config,
     statsCounter,
+    topic,
     monologue
   );
-  const audio = speech.meta.cachePrefix + "-audio.mp3";
-  await fs.copyFile(
-    speech.meta.cachePrefix + "-audio.mp3",
-    projectDir + "speech.mp3"
-  );
-
+  await fs.copyFile(speech.speechFileName, projectDir + "speech.mp3");
+  console.timeEnd("tts");
+  console.time("image prompts");
   const iprompts = await step03TextToImagePrompt(
     apiFromCacheOr,
     config,
     statsCounter,
     monologue
   );
-  const alignment = align(monologue, speech.data, iprompts);
+  console.timeEnd("image prompts");
+
+  const [videoAlignments, music] = await Promise.all([
+    doVideo(projectDir, config, monologue, speech, iprompts),
+    doMusic(speech, monologue, projectDir, config, statsCounter),
+  ]);
+
+  const res = await step08ffmpeg(apiFromCacheOr, {
+    speech: speech.speechFileName,
+    music: music.musicFileName,
+    alignment: videoAlignments,
+  });
+  fs.copyFile(res.meta.cachePrefix + "-merged.mp4", projectDir + "merged.mp4");
+}
+
+type Config = any;
+
+async function doVideo(
+  projectDir: string,
+  config: Config,
+  monologue: string,
+  speech: TTSResponseFinal,
+  iprompts: {text: string, prompt: string}[]
+) {
+  const alignment = alignSpeech(monologue, speech.data, iprompts);
   for (const prompt of alignment) {
     const img = await step04TextToImage(apiFromCacheOr, config, prompt.prompt);
     await fs.copyFile(
-      img.meta.cachePrefix + "-img.jpg",
+      img.imageFilePath,
       projectDir +
         `${prompt.startSeconds.toFixed(2)}-${prompt.endSeconds.toFixed(
           3
         )}-img.jpg`
     );
   }
-  let sleepDur = 0;
-  const preSleep = () => sleep(sleepDur++ * 10000);
-  const videoAlignments = await Promise.all(
-    alignment.map(async (prompt) => {
-      const img1 = await step04TextToImage(
-        apiFromCacheOr,
-        config,
-        prompt.prompt
-      );
-      const imageFilePath = img1.meta.cachePrefix + "-img.jpg";
-      let res;
-      try {
-        res = await step05ImageToVideo(
-          apiFromCacheOr,
-          config,
-          prompt.prompt,
-          imageFilePath,
-          preSleep
-        );
-      } catch (e) {
-        console.error(e);
-        return null;
-      }
-      await fs.copyFile(
-        res.meta.cachePrefix + "-vid.mp4",
-        projectDir +
-          `${prompt.startSeconds.toFixed(2)}-${prompt.endSeconds.toFixed(
-            3
-          )}-vid.mp4`
-      );
-      return {
-        ...prompt,
-        video: res.meta.cachePrefix + "-vid.mp4",
-      };
-    })
-  );
+  let videoAlignments: (ImageSpeechVideoAlignment | null)[] = [];
+  for (let i = 0; i < 3; i++) {
+    videoAlignments = await alignVideo(alignment, config, projectDir);
+    if (videoAlignments.every((x) => x !== null)) break;
+    console.log(
+      `retrying ${videoAlignments.filter((x) => !x).length} failed videos`
+    );
+  }
 
   assertNonNull(videoAlignments, "some videos failed to generate");
   console.log(videoAlignments);
-  fs.writeFile(
+  await fs.writeFile(
     projectDir + "alignments.json",
     JSON.stringify(videoAlignments, null, 2)
   );
-  const res = await step06ffmpeg(apiFromCacheOr, {
-    audio,
-    alignment: videoAlignments,
-  });
-  fs.copyFile(res.meta.cachePrefix + "-merged.mp4", projectDir + "merged.mp4");
+  return videoAlignments;
 }
-
-export type ImageSpeechAlignment = {
-  startSeconds: number;
-  endSeconds: number;
-  prompt: string;
-  speech: string;
-};
-function align(
+async function doMusic(
+  speech: TTSResponseFinal,
   monologue: string,
-  speech: TTSResponse,
-  prompts: { text: string; prompt: string }[]
+  projectDir: string,
+  config: Config,
+  statsCounter: StatsCounter
 ) {
-  const output: ImageSpeechAlignment[] = [];
-  const alignment = { ...speech.alignment };
-  for (const prompt of prompts) {
-    const leadingWS = monologue.match(/^\s+/);
-    if (leadingWS && prompt.text[0] !== monologue[0]) {
-      prompt.text = leadingWS[0] + prompt.text;
-    }
-    if (!monologue.startsWith(prompt.text))
-      throw Error(
-        `monologue does not start with prompt: ${
-          prompt.text
-        }>>>${monologue.slice(0, prompt.text.length)}`
-      );
-    const speechText = alignment.characters
-      .slice(0, prompt.text.length)
-      .join("");
-    if (speechText.trim() !== prompt.text.trim())
-      throw Error(
-        `speech does not match prompt: '${prompt.text}'>>>'${speechText}'`
-      );
-    output.push({
-      startSeconds: alignment.character_start_times_seconds[0],
-      endSeconds: alignment.character_end_times_seconds[prompt.text.length - 1],
-      prompt: prompt.prompt,
-      speech: prompt.text,
-    });
-
-    monologue = monologue.slice(prompt.text.length);
-    alignment.characters = alignment.characters.slice(prompt.text.length);
-    alignment.character_start_times_seconds =
-      alignment.character_start_times_seconds.slice(prompt.text.length);
-    alignment.character_end_times_seconds =
-      alignment.character_end_times_seconds.slice(prompt.text.length);
-  }
-  return output;
+  const musicDuration =
+    speech.data.alignment.character_end_times_seconds.slice(-1)[0];
+  const musicPrompt = await step06TextToMusicPrompt(
+    apiFromCacheOr,
+    config,
+    statsCounter,
+    monologue,
+    musicDuration
+  );
+  const music = await step07music(
+    apiFromCacheOr,
+    config,
+    musicPrompt,
+    musicDuration
+  );
+  await fs.copyFile(music.musicFileName, projectDir + "music.mp3");
+  return music;
 }
-
 void main();

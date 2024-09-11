@@ -8,7 +8,7 @@ You are tasked with generating 10 topics for deep, insightful TikTok-style short
 
 Guidelines for generating the TikTok topic:
 
-1. The topic should be relatable to a wide audience but offer a unique perspective.
+1. The topic should be relatable to a wider audience but offer a unique perspective.
 2. It should be concise enough to be explored in a short video format (15-60 seconds).
 3. The topic should provoke thought, emotion, or self-reflection.
 4. It should be based on a specific insight that isn't immediately obvious.
@@ -23,6 +23,14 @@ Structure your output as follows:
 4. Potential Impact: How this topic could affect viewers' thinking or behavior (1-2 sentences)
 5. Clickbait Title: How the Instagram Reels/TikTok/Youtube Short should be titled to catch attention.
 6. Instagram Hashtags: A set of hashtags to add to the instagram reel.
+7. Voice: The ID of the most fitting voice to use, from the below list.
+
+Voice IDs:
+- "ocean": Ocean - Monotonous Voice. Yogi Voice for Guided Meditations and Philosophical Storytelling. Labels: English (American), Calm, Male, Middle-Aged, Narrative & Story
+- "benjamin": Benjamin - Deep, Warm, Calming. A gentle and warm Middle Age American voice to soothe and relax you. Suitable for all types of narration but specially designed for applications like ASMR and Guided Visualization relaxation applications. Labels: Middle Aged, Male, English, Narrative & Story
+- "stone": Adam Stone - late night radio. A middle aged 'Brit' with a velvety laid back, late night talk show host timbre. Labels: Middle Aged, Male, English, Narrative & Story
+- "cook": Kyana Cook - Middle aged female American voice with a slight accent. A feminine voice that delivers soft and alluring tone . Something that sounds sensational. Great for Audiobooks. Labels: Middle Aged, Female, English, Narrative & Story
+- "afriba": Young British female with a Sad tone. Works well for Storytelling. Young, Female, Narrative & Story
 
 Topic examples:
 <topic>Life advice on personal growth, relationships, and maintaining a positive mindset</topic>
@@ -49,7 +57,8 @@ Output 10 different topics. Output example:
     "relevance": "In an era of smartphones and endless entertainment options, many people rarely experience true boredom. This constant engagement may be impacting our ability to think creatively and generate novel ideas, which are crucial skills in both personal and professional contexts.",
     "potential_impact": "This topic could inspire viewers to intentionally disconnect from digital devices and embrace moments of boredom, potentially unlocking new levels of creativity and problem-solving abilities.",
     "clickbait_title": "Bored? Embrace it.",
-    "instagram_hashtags": "#deepmindthoughts #deepthoughtswithhuggybear #deepthoughtsatnight #yqdeepthoughts #dork #sadmood #hatersgonnahate #writerslife #thoughtsoftheday #brokenfeelings #wordsforthought #2amthoughts #turnaround #disappointment #sadthoughts #beautifulmind #braveheart #vulnerable #britishmuseum #philosophyquotes #philosophers #quotesofinsta #wordsmiths #masculinewomen #dailyperspective"
+    "instagram_hashtags": "#deepmindthoughts #deepthoughtswithhuggybear #deepthoughtsatnight #yqdeepthoughts #dork #sadmood #hatersgonnahate #writerslife #thoughtsoftheday #brokenfeelings #wordsforthought #2amthoughts #turnaround #disappointment #sadthoughts #beautifulmind #braveheart #vulnerable #britishmuseum #philosophyquotes #philosophers #quotesofinsta #wordsmiths #masculinewomen #dailyperspective",
+    "voice": "ocean"
 }, ...]`;
 
 export type FindTopicAiResponse = {
@@ -59,16 +68,40 @@ export type FindTopicAiResponse = {
   potential_impact: string;
   clickbait_title: string;
   instagram_hashtags: string;
+  voice: string;
 };
 
 export async function step00FindTopic(
   apiFromCacheOr: CacheOrComputer,
   config: { ANTHROPIC_API_KEY?: string; ANTHROPIC_MODEL?: string },
   statsCounter: StatsCounter,
-  seed: number
+  seed: number,
+  count: number
 ): Promise<FindTopicAiResponse[]> {
+  if (count > 100) throw Error("prompt too long");
   const key = config.ANTHROPIC_API_KEY;
   if (!key || !config.ANTHROPIC_MODEL) throw Error("no ANTHROPIC_API_KEY");
+  const previousResults: Anthropic.Messages.MessageParam[] = [];
+  const oldTopics: FindTopicAiResponse[] = [];
+  const iteration = Math.floor((count - 1) / 10);
+  for (let i = 0; i < iteration; i++) {
+    const topics = await step00FindTopic(
+      apiFromCacheOr,
+      config,
+      statsCounter,
+      seed,
+      iteration - 1
+    );
+    previousResults.push({
+      role: "assistant",
+      content: [{ type: "text", text: JSON.stringify(topics, null, 2) }],
+    });
+    previousResults.push({
+      role: "user",
+      content: [{ type: "text", text: "Ten more topics" }],
+    });
+    oldTopics.push(...topics);
+  }
   const anthropic = new Anthropic({ apiKey: key });
   const model = config.ANTHROPIC_MODEL;
   const body: MessageCreateParamsNonStreaming & { seed: number } = {
@@ -86,6 +119,7 @@ export async function step00FindTopic(
           },
         ],
       },
+      ...previousResults,
       {
         role: "assistant",
         content: [{ type: "text", text: "[" }],
@@ -109,5 +143,5 @@ export async function step00FindTopic(
   statsCounter.output_tokens += msg.usage.output_tokens;
   console.assert(msg.content.length === 1);
   if (!(msg.content[0].type === "text")) throw Error("unexpected message type");
-  return JSON.parse("[" + msg.content[0].text);
+  return [...oldTopics, ...JSON.parse("[" + msg.content[0].text)];
 }

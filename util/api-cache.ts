@@ -1,11 +1,11 @@
 import { promises as fs } from "node:fs";
 
-type Response<T> = { meta: { cachePrefix: string }; data: T };
+export type CacheResponse<T> = { meta: { cachePrefix: string }; data: T };
 export type CacheOrComputer = <T>(
   api_url: string,
   api_body: unknown,
   call: (util: WriteUtil) => Promise<T>
-) => Promise<Response<T>>;
+) => Promise<CacheResponse<T>>;
 
 const cachePath: string = "./data/api-cache/";
 
@@ -30,7 +30,7 @@ export async function apiFromCacheOr<T>(
   api_url: string,
   api_body: unknown,
   call: (util: WriteUtil) => Promise<T>
-): Promise<Response<T>> {
+): Promise<CacheResponse<T>> {
   const hash = await digestMessage(JSON.stringify({ api_url, api_body }));
   const cachePrefix = cachePath + hash.slice(0, 16);
   const cacheFilePath = cachePrefix + ".json";

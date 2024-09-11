@@ -5,21 +5,16 @@ import { MessageCreateParamsNonStreaming } from "@anthropic-ai/sdk/resources";
 import { FindTopicAiResponse } from "./step-00-find-topic";
 
 const PROMPT = `
-You are a writer and director specializing in deep thought TikTok content. Your task is to generate a 30-second monologue about a given topic. It can be in the style of a poem, of a story, or in the style of Alan Watts. This monologue should be designed to captivate viewers and provide profound insights.
-
-Follow these guidelines for the monologue structure:
-1. Start with an attention-catching statement that people can relate to
-2. Develop the content to be generic enough to resonate with a wide audience
-3. Conclude with a deep insight about life, love, or the given topic
-
-When crafting the monologue, orient yourself by the examples.
+Craft a monologue or story based on the given topic. Orient yourself by the examples.
+Prefer to be bold to being boring. It is better if your monologue is controversial yet captivating rather than unoffensive but boring and bland. If you write a story, make it heartfelt and emotional.
 
 The topic for your monologue is:
 <topic>
 {{TOPIC}}
 </topic>
 
-Generate a 30 to 60 second monologue (approximately 70-140 words) based on this topic. Ensure that your monologue adheres to the structure and style guidelines provided above. Remember to start with an attention-grabbing statement, develop relatable content, and end with a profound insight.
+
+Generate a 30 to 60 second monologue (approximately 70-140 words) based on this topic. End your monologue in a profound statement.
 
 Output purely the monologue, nothing else.
 

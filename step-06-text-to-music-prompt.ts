@@ -5,7 +5,7 @@ import { MessageCreateParamsNonStreaming } from "@anthropic-ai/sdk/resources";
 import { FindTopicAiResponse } from "./step-00-find-topic";
 
 const PROMPT = `
-You are a writer and director specializing in deep thought TikTok content. Your task is to generate an AI prompt for a music generation AI to create background music for a 60-second monologue. This music should enhance the emotional impact and complement the content of the monologue.
+You are a writer and director specializing in deep thought TikTok content. Your task is to generate an AI prompt for a music generation AI to create background music for a {{DURATION}}-second monologue. This music should enhance the emotional impact and complement the content of the monologue.
 
 Here is the monologue:
 <monologue>
@@ -25,7 +25,7 @@ To create an effective AI prompt for background music, follow these steps:
    - Instrumentation
    - Mood or atmosphere
 
-3. Think about how the music should evolve over the 60-second duration:
+3. Think about how the music should evolve over the duration:
    - Should it have a consistent feel throughout?
    - Are there moments where the music should intensify or soften?
    - Consider any natural pauses or emphases in the monologue where the music could respond
@@ -39,7 +39,8 @@ export async function step07TextToMusicPrompt(
   apiFromCacheOr: CacheOrComputer,
   config: { ANTHROPIC_API_KEY?: string; ANTHROPIC_MODEL?: string },
   statsCounter: StatsCounter,
-  monologue: string
+  monologue: string,
+  durationSeconds: number
 ) {
   const key = config.ANTHROPIC_API_KEY;
   if (!key || !config.ANTHROPIC_MODEL) throw Error("no ANTHROPIC_API_KEY");
@@ -56,9 +57,9 @@ export async function step07TextToMusicPrompt(
         content: [
           {
             type: "text",
-            text: PROMPT.replace(
-              "{{MONOLOGUE}}",
-              monologue
+            text: PROMPT.replace("{{MONOLOGUE}}", monologue).replace(
+              "{{DURATION}}",
+              `${Math.ceil(durationSeconds)}`
             ),
           },
         ],
