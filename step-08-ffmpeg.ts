@@ -2,6 +2,7 @@ import { promisify } from "node:util";
 import { ImageSpeechAlignment } from "./util/align-video";
 import { CacheOrComputer } from "./util/api-cache";
 import child_process from "node:child_process";
+import path from "node:path";
 
 async function getLoudnessTarget(
   fileName: string,
@@ -40,6 +41,7 @@ export async function step06ffmpeg(
   data: {
     speech: string;
     music: string;
+    subtitles: string;
     alignment: (ImageSpeechAlignment & { video: string })[];
   }
 ) {
@@ -69,9 +71,14 @@ export async function step06ffmpeg(
           )},setpts=${setpts}[v${i}]; `;
         })
         .join("");
+      const inputWidth = 1280;
+      const outputWidth = 900;
+      const outputRatio = 4 / 5;
+      const outputHeight = Math.round(outputWidth / outputRatio);
+      const outputPaddingTop = 0.1 * outputHeight;
       filter +=
         data.alignment.map((e, i) => `[v${i}]`).join("") +
-        `concat=n=${data.alignment.length}:v=1:a=0[video]`;
+        `concat=n=${data.alignment.length}:v=1:a=0[video]; [video]crop=w=${outputWidth},pad=h=${outputHeight}:y=${outputPaddingTop},subtitles=filename=${data.subtitles}[videocrop]`;
       const cli = [
         "-i",
         data.speech,
@@ -84,13 +91,16 @@ export async function step06ffmpeg(
         // need to make the speech stereo first otherwise output will be mono
         `[0:a][0:a]amerge=inputs=2[spmono]; [spmono]${speechLoudness}[speech]; [1:a]${musicLoudness}[music]; [speech][music]amix=inputs=2,afade=type=out:start_time=${fadeOutStart}:duration=1[audio]`,
         "-map",
-        "[video]",
+        "[videocrop]",
         "-map",
         "[audio]",
+        "-ar",
+        "44100",
         "-crf",
         "20",
         // ffmpeg does not want to copy input frame rate from a concat filter i guess
-        "-r", "24", // -fps_mode passthrough
+        "-r",
+        "24", // -fps_mode passthrough
         util.cachePrefix + "-merged.mp4",
       ];
       console.log(cli);
@@ -106,5 +116,5 @@ export async function step06ffmpeg(
       });
     }
   );
-  return result;
+  return { ...result, videoFileName: result.meta.cachePrefix + "-merged.mp4" };
 }

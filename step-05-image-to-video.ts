@@ -14,7 +14,7 @@ type P = {
 };
 async function processA(props: P, util: WriteUtil) {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     protocolTimeout: 30 * 60 * 1000,
   });
   const page = await browser.newPage();
@@ -229,9 +229,8 @@ async function processB(props: P, util: WriteUtil, page: Page) {
       }
       const res = await page.$("::-p-aria(Content error)");
       if (res) {
-        console.error("content error, they refused to generate");
-        // throw Error("content error, they refused to generate");
-        continue;
+        // console.error("content error, they refused to generate");
+        throw Error("content error, they refused to generate");
       }
       console.error(
         "no readyness element found, probably need to press gen button (again)",
@@ -250,6 +249,7 @@ async function processB(props: P, util: WriteUtil, page: Page) {
         });
     }
   }
+  console.log("video done!");
   const src = await vid.evaluate((el: HTMLSourceElement) => el.src);
   const ab = await fetch(src).then((res) => res.arrayBuffer());
   await util.writeCompanion("-vid.mp4", new Uint8Array(ab));

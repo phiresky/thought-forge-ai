@@ -11,6 +11,7 @@ import { step05ImageToVideo } from "./step-05-image-to-video";
 import { step07TextToMusicPrompt as step06TextToMusicPrompt } from "./step-06-text-to-music-prompt";
 import { step07music } from "./step-07-music";
 import { step06ffmpeg as step08ffmpeg } from "./step-08-ffmpeg";
+import { subtitles } from "./step-09-subtitles";
 import { sleep } from "./util";
 import {
   alignSpeech,
@@ -35,7 +36,7 @@ async function main() {
     config,
     statsCounter,
     seed,
-    20
+    30
   );
   console.log(
     "topics:",
@@ -49,7 +50,7 @@ async function main() {
   if (isNaN(choice)) throw Error("no topic chosen");
   const topic = topics[choice];
   console.log("chosen topic", topic);
-  const projectDir = `data/${topic.clickbait_title.replace(/\//g, "")}/`;
+  const projectDir = `data/videos/${choice.toString().padStart(3, "0")} ${topic.clickbait_title.replace(/\//g, "")}/`;
   await fs.mkdir(projectDir, { recursive: true });
   await fs.writeFile(projectDir + "topic.json", JSON.stringify(topic, null, 2));
   await fs.writeFile(projectDir + "seed.json", JSON.stringify(seed, null, 2));
@@ -94,12 +95,15 @@ async function main() {
     ),
   ]);
 
+  const subtitleFileName = projectDir + "subtitles" + ".ass";
+  await subtitles({ speech, outputFilename: subtitleFileName });
   const res = await step08ffmpeg(apiFromCacheOr, {
     speech: speech.speechFileName,
+    subtitles: subtitleFileName,
     music: music.musicFileName,
     alignment: videoAlignments,
   });
-  fs.copyFile(res.meta.cachePrefix + "-merged.mp4", projectDir + "merged.mp4");
+  fs.copyFile(res.videoFileName, projectDir + "merged.mp4");
 }
 
 type Config = any;
@@ -156,7 +160,7 @@ async function doMusic(
   const musicDuration =
     speech.data.alignment.character_end_times_seconds.slice(-1)[0] +
     pauseAfterSeconds;
-    console.log("music duration", musicDuration);
+  console.log("music duration", musicDuration);
   const musicPrompt = await step06TextToMusicPrompt(
     apiFromCacheOr,
     config,
