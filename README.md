@@ -22,22 +22,22 @@ Sometimes the quality is surprisingly good, both in the topic and structure as w
 
 I think the output could be improved a bit with better prompts, and significantly with more cherry-picking or using (human) source material or at least inspiration.
 
-## Tools
+## Steps and Tools
 
-This project uses a combination of tools:
+This project uses a combination of tools together with custom written code:
 
-| Task                                                                         | Tool                                  | Cost per Video           | Free Alternative                            | Code                                     | Example                  |
-| ---------------------------------------------------------------------------- | ------------------------------------- | ------------------------ | ------------------------------------------- | ---------------------------------------- | ------------------------ |
-| Choose Topics, Voice and Clickbait Title                                     | LLM (Claude 3.5)                      | <$0.01[^1]               | Llama 3.1                                   | [step-00-find-topic.ts][s0src]           | [topic.json][s0eg]       |
-| Write monologue script                                                       | LLM (Claude 3.5)                      | $0.01[^2]                | Llama 3.1                                   | [step-01-write-monologue.ts][s1src]      | [monologue.txt][s1eg]    |
-| Read monologue                                                               | TTS (Elevenlabs)                      | $0.20[^3]                | [coqui-ai](https://github.com/coqui-ai/TTS) | [step-02-text-to-speech.ts][s2src]       | [speech.mp3][s2eg]       |
-| Split monologue into scenes, create image prompts, calculate start+end times | LLM (Claude 3.5)                      | $0.01                    | Llama 3.1                                   | [step-03-text-to-image-prompt.ts][s3src] | [alignments.json][s3eg]  |
-| Create starting image for each scene                                         | Text to Image (Flux.1 Pro)            | $0.35[^4]                | self-hosted Flux.1 Dev                      | [step-04-text-to-image.ts][s4src]        | [example.jpg][s4eg]      |
-| Create scene video                                                           | Image to Video (RunwayML Gen-3 Alpha) | 1x$6.00 or $80/month[^5] | ?                                           | [step-05-image-to-video.ts][s5src]       | [example.mp4][s5eg]      |
-| Create music prompt                                                          | LLM (Claude 3.5)                      | $0.01 $                  | Llama 3.1                                   | [step-06-text-to-music-prompt.ts][s6src] | [music-prompt.txt][s6eg] |
-| Create music from prompt                                                     | Text to Audio (MusicGen)              | $0.17[^6]                | MusicGen self-hosted                        | [step-07-music.ts][s7src]                | [music.mp3][s7eg]        |
-| Create subtitles for burn in                                                 | None                                  | $0                       | -                                           | [step-08-subtitles.ts][s8src]            | [subtitles.ass][s8eg]    |
-| Merge and cut video, normalize loudness and merge audio, burn in subtitles   | ffmpeg                                | $0                       | -                                           | [step-09-ffmpeg.ts](s9src)               | [merged.mp4][s9eg]       |
+| Step | Task                                                                         | Tool                                  | Cost per Video           | Free Alternative                            | Code                                     | Example                  |
+| ---- | ---------------------------------------------------------------------------- | ------------------------------------- | ------------------------ | ------------------------------------------- | ---------------------------------------- | ------------------------ |
+| 0    | Choose Topics, Voice and Clickbait Title                                     | LLM (Claude 3.5)                      | <$0.01[^1]               | Llama 3.1                                   | [step-00-find-topic.ts][s0src]           | [topic.json][s0eg]       |
+| 1    | Write monologue script                                                       | LLM (Claude 3.5)                      | $0.01[^2]                | Llama 3.1                                   | [step-01-write-monologue.ts][s1src]      | [monologue.txt][s1eg]    |
+| 2    | Read monologue                                                               | TTS (Elevenlabs)                      | $0.20[^3]                | [coqui-ai](https://github.com/coqui-ai/TTS) | [step-02-text-to-speech.ts][s2src]       | [speech.mp3][s2eg]       |
+| 3    | Split monologue into scenes, create image prompts, calculate start+end times | LLM (Claude 3.5)                      | $0.01                    | Llama 3.1                                   | [step-03-text-to-image-prompt.ts][s3src] | [alignments.json][s3eg]  |
+| 4    | Create starting image for each scene                                         | Text to Image (Flux.1 Pro)            | $0.35[^4]                | self-hosted Flux.1 Dev                      | [step-04-text-to-image.ts][s4src]        | [example.jpg][s4eg]      |
+| 5    | Create scene video                                                           | Image to Video (RunwayML Gen-3 Alpha) | 1x$6.00 or $80/month[^5] | ?                                           | [step-05-image-to-video.ts][s5src]       | [example.mp4][s5eg]      |
+| 6    | Create music prompt                                                          | LLM (Claude 3.5)                      | $0.01 $                  | Llama 3.1                                   | [step-06-text-to-music-prompt.ts][s6src] | [music-prompt.txt][s6eg] |
+| 7    | Create music from prompt                                                     | Text to Audio (MusicGen)              | $0.17[^6]                | MusicGen self-hosted                        | [step-07-music.ts][s7src]                | [music.mp3][s7eg]        |
+| 8    | Create subtitles for burn in                                                 | None                                  | $0                       | -                                           | [step-08-subtitles.ts][s8src]            | [subtitles.ass][s8eg]    |
+| 9    | Merge and cut video, normalize loudness and merge audio, burn in subtitles   | ffmpeg                                | $0                       | -                                           | [step-09-ffmpeg.ts](s9src)               | [merged.mp4][s9eg]       |
 
 [s0src]: ./src/step-00-find-topic.ts
 [s1src]: ./src/step-01-write-monologue.ts
