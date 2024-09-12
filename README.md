@@ -6,9 +6,9 @@ Examples: (make sure to turn on audio, GitHub mutes by default)
 
 https://github.com/user-attachments/assets/a915af2d-d3a5-41a2-a76a-af2ac6f8b47d
 
-https://github.com/user-attachments/assets/6e1c8474-d115-46a0-acf7-71ca79fee551
+https://github.com/user-attachments/assets/f32acff6-bdb6-43b0-9aac-cd5b993c19be
 
-https://github.com/user-attachments/assets/5a3b9845-bc43-4748-b551-fc1ae69e4cab
+https://github.com/user-attachments/assets/6e1c8474-d115-46a0-acf7-71ca79fee551
 
 Some more examples are in [./data/examples](./data/examples).
 
