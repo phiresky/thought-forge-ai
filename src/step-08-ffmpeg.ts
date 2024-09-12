@@ -98,7 +98,7 @@ export async function step06ffmpeg(
         "-ar",
         "44100",
         "-crf",
-        "20",
+        "21",
         // ffmpeg does not want to copy input frame rate from a concat filter i guess
         "-r",
         "24", // -fps_mode passthrough

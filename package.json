@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate": "tsx generate.ts"
+    "generate": "tsx src/generate.ts"
   },
   "keywords": [],
   "author": "",

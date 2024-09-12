@@ -1,4 +1,4 @@
-# deep-thoughts-ai
+# philosophy-short-video-ai
 
 Generate 30-60 second "deep thought" TikTok-style video including a monologue, moving video scenes, music, and subtitles.
 
