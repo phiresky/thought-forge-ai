@@ -6,14 +6,9 @@ Examples:
 
 https://github.com/user-attachments/assets/5a3b9845-bc43-4748-b551-fc1ae69e4cab
 
-
-
 https://github.com/user-attachments/assets/6e1c8474-d115-46a0-acf7-71ca79fee551
 
-
 Some more examples are in [./data/examples](./data/examples).
-
-**Why Being 'Weak' Is Actually Your Greatest Strength**
 
 ## Background
 
@@ -24,3 +19,16 @@ Some of this type of content has clearly AI-generated elements, for example usin
 ## Quality
 
 Sometimes the quality is surprisingly good, both in the topic and structure as well as the video. Mostly it is somewhat mediocre. I think the output could be improved a bit with better prompts, and significantly with more cherry-picking or using (human) source material.
+
+## Tools
+
+This project uses a combination of tools:
+
+| Task                              | Tool             | Cost per Video | Code                                           | Example                 |
+| --------------------------------- | ---------------- | -------------- | ---------------------------------------------- | ----------------------- |
+| Choose Topics and Clickbait Title | LLM (Claude 3.5) | <$0.01[^1]     | [step-00-find-topic.ts][step-00-find-topic.ts] | [example.json][topiceg] |
+
+[step-00-find-topic.ts]: https://github.com/phiresky/thought-forge-ai/blob/master/src/step-00-find-topic.ts
+[topiceg]: https://github.com/phiresky/thought-forge-ai/blob/master/data/examples/002%20Why%20Being%20'Weak'%20Is%20Actually%20Your%20Greatest%20Strength/topic.json
+
+[^1]: 1200 tokens _ 3$/million + 2000 _ 3$/million = $0.03 for 10 videos

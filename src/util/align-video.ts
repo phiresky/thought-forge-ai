@@ -97,7 +97,7 @@ async function generateWithRetry(
   preSleep: () => Promise<void>,
   projectDir: string
 ) {
-  for (let attempt = 0; attempt < 3; attempt++) {
+  for (let attempt = 0; attempt < 4; attempt++) {
     const img1 = await step04TextToImage(
       apiFromCacheOr,
       config,
