@@ -5,10 +5,12 @@ Generate 30-60 second "deep thought" TikTok-style video including a monologue, m
 Example:
 
 **Why Being Bored Might Be Your Secret Superpower**
-<video controls src="data/examples/007 Why Being Bored Might Be Your Secret Superpower/merged.mp4" title=""></video>
+
+
+![](./data/examples/007%20Why%20Being%20Bored%20Might%20Be%20Your%20Secret%20Superpower/merged.mp4)
 
 **Why Being 'Weak' Is Actually Your Greatest Strength**
-<video controls src="data/examples/002 Why Being 'Weak' Is Actually Your Greatest Strength/merged.mp4" title=""></video>
+![](data/examples/002 Why Being 'Weak' Is Actually Your Greatest Strength/merged.mp4)
 
 ## Background
 
