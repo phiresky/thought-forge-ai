@@ -12,7 +12,7 @@ https://github.com/user-attachments/assets/6e1c8474-d115-46a0-acf7-71ca79fee551
 
 Some more examples are in [./data/examples](./data/examples).
 
-## Background
+## Background / Motivation
 
 I've recently seen a fair amount of "philosophical" and story-telling content on social media. Common traits are a calm voice, soothing music, calm pictures and a discussion of some topic of self-improvement, or love, or the world and our place in it. I enjoy this content which the algorithms have noticed.
 
@@ -40,6 +40,8 @@ This project uses a combination of tools together with custom written code:
 | 7    | Create music from prompt                                                     | Text to Audio (MusicGen)              | $0.17[^6]                | MusicGen self-hosted                        | [step-07-music.ts][s7src]                | [music.mp3][s7eg]        |
 | 8    | Create subtitles for burn in                                                 | None                                  | $0                       | -                                           | [step-08-subtitles.ts][s8src]            | [subtitles.ass][s8eg]    |
 | 9    | Merge and cut video, normalize loudness and merge audio, burn in subtitles   | ffmpeg                                | $0                       | -                                           | [step-09-ffmpeg.ts](s9src)               | [merged.mp4][s9eg]       |
+
+Apart from the video generation the whole process is pretty cheap ($0.7 per video). The video generation is both the most enticing part and also the worst (wrt API and quality). I assume this will change in the coming months.
 
 [s0src]: ./src/step-00-find-topic.ts
 [s1src]: ./src/step-01-write-monologue.ts
