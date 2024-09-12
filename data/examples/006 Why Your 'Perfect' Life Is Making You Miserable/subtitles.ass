@@ -1,0 +1,51 @@
+[Script Info]
+Title: Default Aegisub file
+ScriptType: v4.00+
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+YCbCr Matrix: None
+PlayResX: 640
+PlayResY: 480
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Montserrat,43,&H00FFFFFF,&H000000FF,&HFF333333,&HFF000000,1,0,0,0,100,100,0,0,3,2,0,2,10,10,10,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,00:00:00.00,00:00:01.99,Default,,0,0,0,,In the age of Instagram perfection,
+Dialogue: 0,00:00:02.20,00:00:02.56,Default,,0,0,0,,we're all
+Dialogue: 0,00:00:02.63,00:00:04.12,Default,,0,0,0,,curating our lives like mini
+Dialogue: 0,00:00:04.17,00:00:05.44,Default,,0,0,0,,museums of happiness.
+Dialogue: 0,00:00:06.04,00:00:07.10,Default,,0,0,0,,But let me tell you,
+Dialogue: 0,00:00:07.38,00:00:08.88,Default,,0,0,0,,behind every flawless
+Dialogue: 0,00:00:08.92,00:00:10.64,Default,,0,0,0,,selfie is a person
+Dialogue: 0,00:00:10.82,00:00:12.95,Default,,0,0,0,,desperately seeking validation.
+Dialogue: 0,00:00:13.56,00:00:15.08,Default,,0,0,0,,We're so busy filtering our
+Dialogue: 0,00:00:15.12,00:00:16.31,Default,,0,0,0,,reality that we've
+Dialogue: 0,00:00:16.34,00:00:17.69,Default,,0,0,0,,forgotten how to live it.
+Dialogue: 0,00:00:19.20,00:00:20.03,Default,,0,0,0,,This obsession with
+Dialogue: 0,00:00:20.08,00:00:21.48,Default,,0,0,0,,perfection is a poison,
+Dialogue: 0,00:00:21.81,00:00:24.57,Default,,0,0,0,,slowly killing our authenticity and self-worth.
+Dialogue: 0,00:00:25.27,00:00:26.59,Default,,0,0,0,,We're chasing likes instead of
+Dialogue: 0,00:00:26.65,00:00:27.89,Default,,0,0,0,,genuine connections,
+Dialogue: 0,00:00:28.33,00:00:29.25,Default,,0,0,0,,and for what?
+Dialogue: 0,00:00:30.20,00:00:30.78,Default,,0,0,0,,A fleeting
+Dialogue: 0,00:00:30.85,00:00:31.66,Default,,0,0,0,,dopamine hit
+Dialogue: 0,00:00:31.98,00:00:32.85,Default,,0,0,0,,that leaves us feeling
+Dialogue: 0,00:00:32.92,00:00:34.22,Default,,0,0,0,,emptier than before.
+Dialogue: 0,00:00:35.34,00:00:36.33,Default,,0,0,0,,The truth is,
+Dialogue: 0,00:00:36.54,00:00:37.29,Default,,0,0,0,,your 'perfect'
+Dialogue: 0,00:00:37.33,00:00:38.47,Default,,0,0,0,,online life is making you
+Dialogue: 0,00:00:38.56,00:00:40.12,Default,,0,0,0,,miserable in the real world.
+Dialogue: 0,00:00:41.07,00:00:42.96,Default,,0,0,0,,It's time we embrace our flaws,
+Dialogue: 0,00:00:43.08,00:00:44.43,Default,,0,0,0,,our messy moments,
+Dialogue: 0,00:00:44.55,00:00:46.05,Default,,0,0,0,,our raw humanity.
+Dialogue: 0,00:00:47.00,00:00:48.10,Default,,0,0,0,,Because in the end,
+Dialogue: 0,00:00:48.34,00:00:49.25,Default,,0,0,0,,it's not the polished
+Dialogue: 0,00:00:49.29,00:00:50.36,Default,,0,0,0,,persona that people will
+Dialogue: 0,00:00:50.41,00:00:52.38,Default,,0,0,0,,remember – it's the real you,
+Dialogue: 0,00:00:52.46,00:00:53.83,Default,,0,0,0,,imperfections and all.
+Dialogue: 0,00:00:54.78,00:00:56.14,Default,,0,0,0,,True happiness lies in the
+Dialogue: 0,00:00:56.18,00:00:56.87,Default,,0,0,0,,freedom of being
+Dialogue: 0,00:00:56.96,00:00:59.07,Default,,0,0,0,,unapologetically yourself.

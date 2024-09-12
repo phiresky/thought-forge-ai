@@ -1,4 +1,4 @@
-# philosophy-short-video-ai
+# thought-forge-ai
 
 Generate 30-60 second "deep thought" TikTok-style video including a monologue, moving video scenes, music, and subtitles.
 
@@ -11,8 +11,9 @@ https://github.com/user-attachments/assets/5a3b9845-bc43-4748-b551-fc1ae69e4cab
 https://github.com/user-attachments/assets/6e1c8474-d115-46a0-acf7-71ca79fee551
 
 
+Some more examples are in [./data/examples](./data/examples).
+
 **Why Being 'Weak' Is Actually Your Greatest Strength**
-![](data/examples/002 Why Being 'Weak' Is Actually Your Greatest Strength/merged.mp4)
 
 ## Background
 

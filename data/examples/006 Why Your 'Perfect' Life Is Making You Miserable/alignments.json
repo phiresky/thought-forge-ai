@@ -1,0 +1,65 @@
+[
+  {
+    "startSeconds": 0,
+    "endSeconds": 5.445,
+    "prompt": "A person meticulously arranging colorful, perfect moments on shelves in a pristine white museum gallery, style: surreal and glossy",
+    "speech": "In the age of Instagram perfection, we're all curating our lives like mini museums of happiness.",
+    "video": "./data/api-cache/0eebaa9694662f18-vid.mp4"
+  },
+  {
+    "startSeconds": 5.445,
+    "endSeconds": 12.957,
+    "prompt": "Split-screen image: one side shows a perfect selfie, the other reveals a stressed person surrounded by self-doubt thought bubbles, style: contrasting realism",
+    "speech": " But let me tell you, behind every flawless selfie is a person desperately seeking validation.",
+    "video": "./data/api-cache/c07949e986fb1c77-vid.mp4"
+  },
+  {
+    "startSeconds": 12.957,
+    "endSeconds": 17.694,
+    "prompt": "A person looking through a giant phone-shaped filter at a blurred, colorful world beyond, style: digital surrealism",
+    "speech": " We're so busy filtering our reality that we've forgotten how to live it.",
+    "video": "./data/api-cache/708ca2599e9ffbfa-vid.mp4"
+  },
+  {
+    "startSeconds": 17.694,
+    "endSeconds": 24.578,
+    "prompt": "A wilting flower in a vase filled with glowing, neon-colored 'perfection' liquid, style: dark and symbolic",
+    "speech": " This obsession with perfection is a poison, slowly killing our authenticity and self-worth.",
+    "video": "./data/api-cache/cd3c57cf32edf0a8-vid.mp4"
+  },
+  {
+    "startSeconds": 24.578,
+    "endSeconds": 34.226,
+    "prompt": "A person running on a treadmill made of smartphone screens, chasing floating heart icons, style: tech-noir",
+    "speech": " We're chasing likes instead of genuine connections, and for what? A fleeting dopamine hit that leaves us feeling emptier than before.",
+    "video": "./data/api-cache/fb6bf2abe22dfd9a-vid.mp4"
+  },
+  {
+    "startSeconds": 34.226,
+    "endSeconds": 40.124,
+    "prompt": "A smiling social media profile picture slowly peeling away to reveal a sad face underneath, style: photorealistic",
+    "speech": " The truth is, your 'perfect' online life is making you miserable in the real world.",
+    "video": "./data/api-cache/725237976b9bf8fa-vid.mp4"
+  },
+  {
+    "startSeconds": 40.124,
+    "endSeconds": 46.057,
+    "prompt": "A diverse group of people hugging, with visible 'imperfections' glowing warmly, style: impressionistic and heartwarming",
+    "speech": " It's time we embrace our flaws, our messy moments, our raw humanity.",
+    "video": "./data/api-cache/7f0fb67cf381c93c-vid.mp4"
+  },
+  {
+    "startSeconds": 46.057,
+    "endSeconds": 53.836,
+    "prompt": "Two silhouettes: one perfectly sculpted but fading, the other rough-edged but vibrant and memorable, style: minimalist contrast",
+    "speech": " Because in the end, it's not the polished persona that people will remember – it's the real you, imperfections and all.",
+    "video": "./data/api-cache/a7f1731620f2750a-vid.mp4"
+  },
+  {
+    "startSeconds": 53.836,
+    "endSeconds": 60.072,
+    "prompt": "A person breaking free from a shell of filters and masks, radiating genuine joy, style: uplifting magical realism",
+    "speech": " True happiness lies in the freedom of being unapologetically yourself.",
+    "video": "./data/api-cache/c0ac3c12e8cb104f-vid.mp4"
+  }
+]
