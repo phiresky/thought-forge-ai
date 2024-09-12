@@ -1,0 +1,59 @@
+[Script Info]
+Title: Default Aegisub file
+ScriptType: v4.00+
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+YCbCr Matrix: None
+PlayResX: 640
+PlayResY: 480
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Montserrat,43,&H00FFFFFF,&H000000FF,&HFF333333,&HFF000000,1,0,0,0,100,100,0,0,3,2,0,2,10,10,10,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,00:00:00.00,00:00:00.62,Default,,0,0,0,,You know,
+Dialogue: 0,00:00:01.13,00:00:02.61,Default,,0,0,0,,we're all walking around with these
+Dialogue: 0,00:00:02.69,00:00:04.02,Default,,0,0,0,,invisible shields,
+Dialogue: 0,00:00:04.17,00:00:04.54,Default,,0,0,0,,trying to
+Dialogue: 0,00:00:04.60,00:00:06.23,Default,,0,0,0,,protect ourselves from getting hurt.
+Dialogue: 0,00:00:06.83,00:00:07.80,Default,,0,0,0,,But here's the thing -
+Dialogue: 0,00:00:08.18,00:00:09.05,Default,,0,0,0,,those shields?
+Dialogue: 0,00:00:09.65,00:00:11.30,Default,,0,0,0,,They're not just keeping pain out.
+Dialogue: 0,00:00:11.63,00:00:12.80,Default,,0,0,0,,They're keeping love,
+Dialogue: 0,00:00:13.13,00:00:13.79,Default,,0,0,0,,connection,
+Dialogue: 0,00:00:13.82,00:00:15.25,Default,,0,0,0,,and growth out too.
+Dialogue: 0,00:00:15.95,00:00:16.68,Default,,0,0,0,,I used to think
+Dialogue: 0,00:00:16.75,00:00:18.27,Default,,0,0,0,,vulnerability was weakness,
+Dialogue: 0,00:00:18.32,00:00:20.25,Default,,0,0,0,,that showing my true
+Dialogue: 0,00:00:20.30,00:00:21.43,Default,,0,0,0,,self was like handing
+Dialogue: 0,00:00:21.50,00:00:22.88,Default,,0,0,0,,someone a loaded gun.
+Dialogue: 0,00:00:23.99,00:00:25.28,Default,,0,0,0,,But then I realized,
+Dialogue: 0,00:00:25.89,00:00:26.49,Default,,0,0,0,,the bravest
+Dialogue: 0,00:00:26.52,00:00:27.44,Default,,0,0,0,,thing you can do is to
+Dialogue: 0,00:00:27.51,00:00:27.88,Default,,0,0,0,,let those
+Dialogue: 0,00:00:27.93,00:00:28.76,Default,,0,0,0,,walls down.
+Dialogue: 0,00:00:29.46,00:00:30.57,Default,,0,0,0,,It's terrifying,
+Dialogue: 0,00:00:30.61,00:00:31.11,Default,,0,0,0,,sure.
+Dialogue: 0,00:00:31.49,00:00:32.92,Default,,0,0,0,,But it's also liberating.
+Dialogue: 0,00:00:33.62,00:00:35.18,Default,,0,0,0,,When you embrace vulnerability,
+Dialogue: 0,00:00:35.21,00:00:35.88,Default,,0,0,0,,you're saying,
+Dialogue: 0,00:00:36.13,00:00:37.09,Default,,0,0,0,,"This is me,
+Dialogue: 0,00:00:37.18,00:00:38.38,Default,,0,0,0,,flaws and all."
+Dialogue: 0,00:00:38.89,00:00:39.55,Default,,0,0,0,,And you know what?
+Dialogue: 0,00:00:39.57,00:00:41.51,Default,,0,0,0,,People respond to that authenticity.
+Dialogue: 0,00:00:41.53,00:00:42.50,Default,,0,0,0,,They're drawn to it.
+Dialogue: 0,00:00:42.53,00:00:43.56,Default,,0,0,0,,It's like you're giving them
+Dialogue: 0,00:00:43.61,00:00:45.32,Default,,0,0,0,,permission to be real too.
+Dialogue: 0,00:00:46.43,00:00:46.86,Default,,0,0,0,,So yeah,
+Dialogue: 0,00:00:46.89,00:00:47.85,Default,,0,0,0,,you might get hurt.
+Dialogue: 0,00:00:48.29,00:00:49.03,Default,,0,0,0,,But you'll also
+Dialogue: 0,00:00:49.09,00:00:50.31,Default,,0,0,0,,experience love and
+Dialogue: 0,00:00:50.37,00:00:51.08,Default,,0,0,0,,connection on a
+Dialogue: 0,00:00:51.14,00:00:52.80,Default,,0,0,0,,level you never thought possible.
+Dialogue: 0,00:00:53.40,00:00:53.96,Default,,0,0,0,,Because at the
+Dialogue: 0,00:00:54.02,00:00:54.64,Default,,0,0,0,,end of the day,
+Dialogue: 0,00:00:54.67,00:00:56.38,Default,,0,0,0,,it's not about being invincible.
+Dialogue: 0,00:00:56.71,00:00:58.13,Default,,0,0,0,,It's about being human.
+Dialogue: 0,00:00:58.64,00:01:00.74,Default,,0,0,0,,And there's incredible strength in that.

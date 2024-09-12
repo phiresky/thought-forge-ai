@@ -1,0 +1,58 @@
+[
+  {
+    "startSeconds": 0,
+    "endSeconds": 6.235,
+    "prompt": "A person walking surrounded by a transparent, shimmering forcefield, style: ethereal and symbolic",
+    "speech": "You know, we're all walking around with these invisible shields, trying to protect ourselves from getting hurt.",
+    "video": "./data/api-cache/56c1af8b8c806bfc-vid.mp4"
+  },
+  {
+    "startSeconds": 6.235,
+    "endSeconds": 15.255,
+    "prompt": "A heart-shaped window in a stone wall, with colorful light and flowers on one side, darkness on the other, style: metaphorical",
+    "speech": " But here's the thing - those shields? They're not just keeping pain out. They're keeping love, connection, and growth out too.",
+    "video": "./data/api-cache/1f38a0804d856099-vid.mp4"
+  },
+  {
+    "startSeconds": 15.255,
+    "endSeconds": 22.883,
+    "prompt": "A person hesitantly offering their glowing, translucent heart to a shadowy figure holding a gun, style: surreal and emotional",
+    "speech": " I used to think vulnerability was weakness, that showing my true self was like handing someone a loaded gun.",
+    "video": "./data/api-cache/395065bbfe1428c4-vid.mp4"
+  },
+  {
+    "startSeconds": 22.883,
+    "endSeconds": 32.925,
+    "prompt": "A person pushing down crumbling stone walls, revealing a vibrant, sunlit landscape beyond, style: inspirational and dynamic",
+    "speech": " But then I realized, the bravest thing you can do is to let those walls down. It's terrifying, sure. But it's also liberating.",
+    "video": "./data/api-cache/6a7f5149f3e5ce48-vid.mp4"
+  },
+  {
+    "startSeconds": 32.925,
+    "endSeconds": 41.517,
+    "prompt": "A diverse group of people warmly embracing a figure with visible imperfections, radiating acceptance, style: warm and inclusive",
+    "speech": " When you embrace vulnerability, you're saying, \"This is me, flaws and all.\" And you know what? People respond to that authenticity.",
+    "video": "./data/api-cache/3a221f5dc731cfde-vid.mp4"
+  },
+  {
+    "startSeconds": 41.517,
+    "endSeconds": 45.324,
+    "prompt": "A chain reaction of people removing masks, revealing genuine smiles underneath, style: uplifting and contagious",
+    "speech": " They're drawn to it. It's like you're giving them permission to be real too.",
+    "video": "./data/api-cache/605b4fbd8012eeae-vid.mp4"
+  },
+  {
+    "startSeconds": 45.324,
+    "endSeconds": 52.801,
+    "prompt": "A tightrope walker balancing between thorns and roses, reaching for a glowing heart, style: symbolic and dramatic",
+    "speech": " So yeah, you might get hurt. But you'll also experience love and connection on a level you never thought possible.",
+    "video": "./data/api-cache/f9db94234d55f567-vid.mp4"
+  },
+  {
+    "startSeconds": 52.801,
+    "endSeconds": 61.742,
+    "prompt": "A powerful, radiant figure emerging from a cracked stone statue, surrounded by supportive hands, style: empowering and transformative",
+    "speech": " Because at the end of the day, it's not about being invincible. It's about being human. And there's incredible strength in that.",
+    "video": "./data/api-cache/f078c6101f8cc57c-vid.mp4"
+  }
+]
