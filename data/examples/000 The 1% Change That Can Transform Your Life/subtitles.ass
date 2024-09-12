@@ -1,0 +1,54 @@
+[Script Info]
+Title: Default Aegisub file
+ScriptType: v4.00+
+WrapStyle: 0
+ScaledBorderAndShadow: yes
+YCbCr Matrix: None
+PlayResX: 640
+PlayResY: 480
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,Montserrat,43,&H00FFFFFF,&H000000FF,&HFF333333,&HFF000000,1,0,0,0,100,100,0,0,3,2,0,2,10,10,10,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,00:00:00.00,00:00:01.33,Default,,0,0,0,,The hidden power of
+Dialogue: 0,00:00:01.45,00:00:03.95,Default,,0,0,0,,micro-habits is like a silent
+Dialogue: 0,00:00:04.07,00:00:05.86,Default,,0,0,0,,revolution in your life.
+Dialogue: 0,00:00:06.67,00:00:07.87,Default,,0,0,0,,It's not about grand
+Dialogue: 0,00:00:07.94,00:00:10.29,Default,,0,0,0,,gestures or sweeping changes.
+Dialogue: 0,00:00:10.99,00:00:12.77,Default,,0,0,0,,It's about those tiny,
+Dialogue: 0,00:00:12.94,00:00:15.17,Default,,0,0,0,,almost imperceptible shifts you make
+Dialogue: 0,00:00:15.26,00:00:16.85,Default,,0,0,0,,every single day.
+Dialogue: 0,00:00:17.67,00:00:18.54,Default,,0,0,0,,You think it doesn't
+Dialogue: 0,00:00:18.59,00:00:20.46,Default,,0,0,0,,matter if you read one page,
+Dialogue: 0,00:00:20.79,00:00:23.02,Default,,0,0,0,,drink one extra glass of water,
+Dialogue: 0,00:00:23.34,00:00:25.84,Default,,0,0,0,,or meditate for just one minute.
+Dialogue: 0,00:00:26.79,00:00:28.33,Default,,0,0,0,,But that's where you're wrong.
+Dialogue: 0,00:00:29.15,00:00:31.09,Default,,0,0,0,,These micro-habits are the building
+Dialogue: 0,00:00:31.16,00:00:32.85,Default,,0,0,0,,blocks of transformation.
+Dialogue: 0,00:00:33.55,00:00:36.31,Default,,0,0,0,,They're the compound interest of self-improvement.
+Dialogue: 0,00:00:36.91,00:00:37.98,Default,,0,0,0,,While everyone else is
+Dialogue: 0,00:00:38.04,00:00:38.60,Default,,0,0,0,,waiting for the
+Dialogue: 0,00:00:38.64,00:00:40.73,Default,,0,0,0,,perfect moment to change their lives,
+Dialogue: 0,00:00:41.06,00:00:42.66,Default,,0,0,0,,you're already changing,
+Dialogue: 0,00:00:43.10,00:00:45.42,Default,,0,0,0,,one small habit at a time.
+Dialogue: 0,00:00:46.38,00:00:47.14,Default,,0,0,0,,Remember,
+Dialogue: 0,00:00:47.47,00:00:49.02,Default,,0,0,0,,it's not about perfection,
+Dialogue: 0,00:00:49.41,00:00:51.02,Default,,0,0,0,,it's about consistency.
+Dialogue: 0,00:00:51.72,00:00:52.33,Default,,0,0,0,,The 1%
+Dialogue: 0,00:00:52.42,00:00:53.41,Default,,0,0,0,,improvement you make
+Dialogue: 0,00:00:53.45,00:00:55.73,Default,,0,0,0,,today might seem insignificant,
+Dialogue: 0,00:00:56.06,00:00:57.90,Default,,0,0,0,,but compounded over time,
+Dialogue: 0,00:00:58.35,00:00:59.48,Default,,0,0,0,,it becomes the difference
+Dialogue: 0,00:00:59.53,00:01:00.90,Default,,0,0,0,,between who you are
+Dialogue: 0,00:01:01.07,00:01:02.69,Default,,0,0,0,,and who you could be.
+Dialogue: 0,00:01:03.64,00:01:04.41,Default,,0,0,0,,In the end,
+Dialogue: 0,00:01:04.49,00:01:05.03,Default,,0,0,0,,the biggest
+Dialogue: 0,00:01:05.15,00:01:05.92,Default,,0,0,0,,changes in your
+Dialogue: 0,00:01:05.99,00:01:08.01,Default,,0,0,0,,life won't come from a single,
+Dialogue: 0,00:01:08.09,00:01:09.40,Default,,0,0,0,,monumental shift,
+Dialogue: 0,00:01:09.72,00:01:10.48,Default,,0,0,0,,but from the
+Dialogue: 0,00:01:10.54,00:01:12.65,Default,,0,0,0,,accumulated power of tiny,
+Dialogue: 0,00:01:12.77,00:01:14.53,Default,,0,0,0,,everyday decisions.

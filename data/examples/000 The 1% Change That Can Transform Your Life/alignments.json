@@ -1,0 +1,65 @@
+[
+  {
+    "startSeconds": 0,
+    "endSeconds": 10.298,
+    "prompt": "A tiny seed sprouting in silence, contrasted with a large, noisy protest rally, style: split-screen comparison",
+    "speech": "The hidden power of micro-habits is like a silent revolution in your life. It's not about grand gestures or sweeping changes.",
+    "video": "./data/api-cache/706d763a51c2dfb7-vid.mp4"
+  },
+  {
+    "startSeconds": 10.298,
+    "endSeconds": 20.468,
+    "prompt": "A person making a small adjustment to a clock's minute hand, with a stack of books in the background, style: minimalist",
+    "speech": " It's about those tiny, almost imperceptible shifts you make every single day. You think it doesn't matter if you read one page,",
+    "video": "./data/api-cache/bd8afe3e056cb369-vid.mp4"
+  },
+  {
+    "startSeconds": 20.468,
+    "endSeconds": 28.34,
+    "prompt": "A single drop of water creating ripples in a calm pond, with a meditating figure reflected in the water, style: zen-like",
+    "speech": " drink one extra glass of water, or meditate for just one minute. But that's where you're wrong.",
+    "video": "./data/api-cache/f523642a5c2c8b98-vid.mp4"
+  },
+  {
+    "startSeconds": 28.34,
+    "endSeconds": 36.315,
+    "prompt": "A tower of small, colorful building blocks gradually transforming into a majestic structure, style: surreal progression",
+    "speech": " These micro-habits are the building blocks of transformation. They're the compound interest of self-improvement.",
+    "video": "./data/api-cache/9bdbfaf04a6ed575-vid.mp4"
+  },
+  {
+    "startSeconds": 36.315,
+    "endSeconds": 45.429,
+    "prompt": "A person taking a small step forward on a path, leaving footprints that gradually change color, while others stand still, style: symbolic illustration",
+    "speech": " While everyone else is waiting for the perfect moment to change their lives, you're already changing, one small habit at a time.",
+    "video": "./data/api-cache/01354e5b1ca1b0ad-vid.mp4"
+  },
+  {
+    "startSeconds": 45.429,
+    "endSeconds": 55.739,
+    "prompt": "A graph showing a gradual upward trend with tiny increments, each marked '1%', style: infographic",
+    "speech": " Remember, it's not about perfection, it's about consistency. The 1% improvement you make today might seem insignificant,",
+    "video": "./data/api-cache/9112e9cab545f1d7-vid.mp4"
+  },
+  {
+    "startSeconds": 55.739,
+    "endSeconds": 62.693,
+    "prompt": "A split image of a person's present self morphing into their improved future self, connected by a bridge of small habits, style: dreamlike transition",
+    "speech": " but compounded over time, it becomes the difference between who you are and who you could be.",
+    "video": "./data/api-cache/6e8d25a2b11bf682-vid.mp4"
+  },
+  {
+    "startSeconds": 62.693,
+    "endSeconds": 69.404,
+    "prompt": "A large, imposing mountain contrasted with a gentle, winding river carving through a landscape, style: nature metaphor",
+    "speech": " In the end, the biggest changes in your life won't come from a single, monumental shift,",
+    "video": "./data/api-cache/962653186075addb-vid.mp4"
+  },
+  {
+    "startSeconds": 69.404,
+    "endSeconds": 75.536,
+    "prompt": "A mosaic made of countless small, colorful tiles forming a grand, inspiring image, style: detailed close-up transitioning to full view",
+    "speech": " but from the accumulated power of tiny, everyday decisions.",
+    "video": "./data/api-cache/fcbb6fbd15722935-vid.mp4"
+  }
+]

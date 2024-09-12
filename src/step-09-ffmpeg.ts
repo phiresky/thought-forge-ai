@@ -1,8 +1,7 @@
+import child_process from "node:child_process";
 import { promisify } from "node:util";
 import { ImageSpeechAlignment } from "./util/align-video";
 import { CacheOrComputer } from "./util/api-cache";
-import child_process from "node:child_process";
-import path from "node:path";
 
 async function getLoudnessTarget(
   fileName: string,
@@ -56,7 +55,7 @@ export async function step09ffmpeg(
         tp: -1,
       });
       const musicLoudness = await getLoudnessTarget(data.music, {
-        i: -28,
+        i: -25,
         lra: 7,
         tp: -2,
       });
