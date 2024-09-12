@@ -14,7 +14,7 @@ The topic for your monologue is:
 </topic>
 
 
-Generate a 30 to 60 second monologue (approximately 70-140 words) based on this topic. End your monologue in a profound statement.
+Generate a 30 to 50 second monologue (approximately 60-120 words) based on this topic. End your monologue in a profound statement.
 
 Output purely the monologue, nothing else.
 
@@ -108,14 +108,16 @@ export async function step01WriteScript(
       },*/
     ],
   };
-  const msg = (await apiFromCacheOr(
+  const data = (await apiFromCacheOr(
     "https://fakeurl.anthropic.com/anthropic.messages.create",
     body,
     async () => {
       const msg = await anthropic.messages.create(body);
       return msg;
     }
-  )).data;
+  ));
+  const msg = data.data;
+  console.log("meta", data.meta);
   statsCounter.api_calls += 1;
   statsCounter.input_tokens += msg.usage.input_tokens;
   statsCounter.output_tokens += msg.usage.output_tokens;

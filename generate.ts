@@ -31,15 +31,16 @@ async function main() {
   const statsCounter = zeroStatsCounter();
   const config = process.env as any;
   const seed = 1352242560; // (Math.random() * Number.MAX_SAFE_INTEGER) | 0;
+  const maxVideos = 40;
   const topics = await step00FindTopics(
     apiFromCacheOr,
     config,
     statsCounter,
     seed,
-    30
+    maxVideos
   );
   console.log(
-    "topics:",
+    "topics:\n",
     topics
       .map(
         (p, i) => `Topic ${i}: ${p.clickbait_title} (${p.topic}) (${p.voice})`
@@ -49,12 +50,16 @@ async function main() {
   const choice = +process.argv[2];
   if (isNaN(choice)) throw Error("no topic chosen");
   const topic = topics[choice];
-  console.log("chosen topic", topic);
-  const projectDir = `data/videos/${choice.toString().padStart(3, "0")} ${topic.clickbait_title.replace(/\//g, "")}/`;
+  console.log("chosen topic", choice, topic);
+  const projectDir = `data/videos/${choice
+    .toString()
+    .padStart(3, "0")} ${topic.clickbait_title.replace(/\//g, "")}/`;
   await fs.mkdir(projectDir, { recursive: true });
   await fs.writeFile(projectDir + "topic.json", JSON.stringify(topic, null, 2));
   await fs.writeFile(projectDir + "seed.json", JSON.stringify(seed, null, 2));
   console.log("writing monologue");
+  // having cook in there sometimes makes the AI think it should be about cooking.
+  if(topic.voice === "cook") topic.voice = "kyana";
   const monologue = await step01WriteMonologue(
     apiFromCacheOr,
     config,
@@ -122,26 +127,16 @@ async function doVideo(
     iprompts,
     pauseAfterSeconds
   );
-  for (const prompt of alignment) {
-    const img = await step04TextToImage(apiFromCacheOr, config, prompt.prompt);
-    await fs.copyFile(
-      img.imageFilePath,
-      projectDir +
-        `${prompt.startSeconds.toFixed(2)}-${prompt.endSeconds.toFixed(
-          3
-        )}-img.jpg`
-    );
-  }
-  let videoAlignments: (ImageSpeechVideoAlignment | null)[] = [];
-  for (let i = 0; i < 3; i++) {
-    videoAlignments = await alignVideo(alignment, config, projectDir);
-    if (videoAlignments.every((x) => x !== null)) break;
-    console.log(
-      `retrying ${videoAlignments.filter((x) => !x).length} failed videos`
-    );
-  }
+  const _videoAlignments: PromiseSettledResult<ImageSpeechVideoAlignment>[] = await alignVideo(
+    alignment,
+    config,
+    projectDir
+  );
+  const videoAlignments = _videoAlignments.map(p => {
+    if(p.status === "fulfilled") return p.value;
+    else throw Error("at least one video failed to generate");
+  })
 
-  assertNonNull(videoAlignments, "some videos failed to generate");
   console.log(videoAlignments);
   await fs.writeFile(
     projectDir + "alignments.json",

@@ -18,20 +18,28 @@ export function alignSpeech(
   monologue: string,
   speech: TTSResponse,
   prompts: { text: string; prompt: string }[],
-  secondsAfter: number,
+  secondsAfter: number
 ) {
   const output: ImageSpeechAlignment[] = [];
   const alignment = { ...speech.alignment };
+  // ugly hack
+  if (prompts[0].text.startsWith('"') && !monologue.startsWith('"')) {
+    prompts[0].text = prompts[0].text.slice(1);
+    prompts[prompts.length - 1].text = prompts[prompts.length - 1].text.slice(
+      0,
+      -1
+    );
+  }
   for (const prompt of prompts) {
-    const leadingWS = monologue.match(/^\s+/);
+    const leadingWS = monologue.match(/^[\s]+/);
     if (leadingWS && prompt.text[0] !== monologue[0]) {
       prompt.text = leadingWS[0] + prompt.text;
     }
     if (!monologue.startsWith(prompt.text))
       throw Error(
-        `monologue does not start with prompt: ${
+        `monologue does not start with prompt: '${
           prompt.text
-        }>>>${monologue.slice(0, prompt.text.length)}`
+        }'>>>'${monologue.slice(0, prompt.text.length)}'`
       );
     const speechText = alignment.characters
       .slice(0, prompt.text.length)
@@ -62,29 +70,12 @@ export async function alignVideo(
   alignment: ImageSpeechAlignment[],
   config: any,
   projectDir: string
-): Promise<(ImageSpeechVideoAlignment | null)[]> {
+): Promise<PromiseSettledResult<ImageSpeechVideoAlignment>[]> {
   let sleepDur = 0;
   const preSleep = () => sleep(sleepDur++ * 10000);
-  return await Promise.all(
+  return await Promise.allSettled(
     alignment.map(async (prompt) => {
-      const img1 = await step04TextToImage(
-        apiFromCacheOr,
-        config,
-        prompt.prompt
-      );
-      let res;
-      try {
-        res = await step05ImageToVideo(
-          apiFromCacheOr,
-          config,
-          prompt.prompt,
-          img1.imageFilePath,
-          preSleep
-        );
-      } catch (e) {
-        console.error(e);
-        return null;
-      }
+      const res = await generateWithRetry(prompt, config, preSleep, projectDir);
       await fs.copyFile(
         res.videoFilePath,
         projectDir +
@@ -98,4 +89,42 @@ export async function alignVideo(
       };
     })
   );
+}
+
+async function generateWithRetry(
+  prompt: ImageSpeechAlignment,
+  config: any,
+  preSleep: () => Promise<void>,
+  projectDir: string
+) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const img1 = await step04TextToImage(
+      apiFromCacheOr,
+      config,
+      prompt.prompt + (attempt ? ` (${attempt})` : "")
+    );
+    await fs.copyFile(
+      img1.imageFilePath,
+      projectDir +
+        `${prompt.startSeconds.toFixed(2)}-${prompt.endSeconds.toFixed(3)}-img${
+          attempt ? `attempt-${attempt}` : ""
+        }.jpg`
+    );
+    try {
+      const res = await step05ImageToVideo(
+        apiFromCacheOr,
+        config,
+        prompt.prompt,
+        img1.imageFilePath,
+        attempt === 0 ? preSleep : async () => {}
+      );
+      if (res.data.result === "refused-content-error") {
+        throw Error("refused: content error");
+      }
+      return res;
+    } catch (e) {
+      console.error("retrying attempt", attempt, e);
+    }
+  }
+  throw Error("failed to generate video");
 }

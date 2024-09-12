@@ -56,7 +56,7 @@ export async function step06ffmpeg(
         tp: -1,
       });
       const musicLoudness = await getLoudnessTarget(data.music, {
-        i: -24,
+        i: -28,
         lra: 7,
         tp: -2,
       });
@@ -76,9 +76,10 @@ export async function step06ffmpeg(
       const outputRatio = 4 / 5;
       const outputHeight = Math.round(outputWidth / outputRatio);
       const outputPaddingTop = 0.1 * outputHeight;
+      const escapedSubtitleFilename = data.subtitles.replace(/'/g, "\\\\\\'");
       filter +=
         data.alignment.map((e, i) => `[v${i}]`).join("") +
-        `concat=n=${data.alignment.length}:v=1:a=0[video]; [video]crop=w=${outputWidth},pad=h=${outputHeight}:y=${outputPaddingTop},subtitles=filename=${data.subtitles}[videocrop]`;
+        `concat=n=${data.alignment.length}:v=1:a=0[video]; [video]crop=w=${outputWidth},pad=h=${outputHeight}:y=${outputPaddingTop},subtitles=filename=${escapedSubtitleFilename}[videocrop]`;
       const cli = [
         "-i",
         data.speech,

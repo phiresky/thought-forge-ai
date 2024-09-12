@@ -12,19 +12,24 @@ type P = {
   prompt: string;
   imageFilePath: string;
 };
-async function processA(props: P, util: WriteUtil) {
+type Result = "refused-content-error" | "ok";
+async function processA(props: P, util: WriteUtil): Promise<Result> {
   const browser = await puppeteer.launch({
     headless: true,
     protocolTimeout: 30 * 60 * 1000,
   });
   const page = await browser.newPage();
   try {
-    await processB(props, util, page);
+    return await processB(props, util, page);
   } finally {
     await browser.close();
   }
 }
-async function processB(props: P, util: WriteUtil, page: Page) {
+async function processB(
+  props: P,
+  util: WriteUtil,
+  page: Page
+): Promise<Result> {
   const timeout = 50000;
   page.setDefaultTimeout(timeout);
   if (props.RUNWAY_TOKEN) {
@@ -150,7 +155,7 @@ async function processB(props: P, util: WriteUtil, page: Page) {
     };
     startWaitingForEvents();
     await targetPage.goto(
-      "https://app.runwayml.com/video-tools/teams/mobzael/ai-tools/generative-video"
+      `https://app.runwayml.com/video-tools/teams/${props.RUNWAY_USERNAME}/ai-tools/generative-video`
     );
     await Promise.all(promises);
   }
@@ -229,8 +234,8 @@ async function processB(props: P, util: WriteUtil, page: Page) {
       }
       const res = await page.$("::-p-aria(Content error)");
       if (res) {
-        // console.error("content error, they refused to generate");
-        throw Error("content error, they refused to generate");
+        console.error("content error, they refused to generate");
+        return "refused-content-error";
       }
       console.error(
         "no readyness element found, probably need to press gen button (again)",
@@ -253,6 +258,7 @@ async function processB(props: P, util: WriteUtil, page: Page) {
   const src = await vid.evaluate((el: HTMLSourceElement) => el.src);
   const ab = await fetch(src).then((res) => res.arrayBuffer());
   await util.writeCompanion("-vid.mp4", new Uint8Array(ab));
+  return "ok";
 }
 
 export async function step05ImageToVideo(
@@ -282,7 +288,7 @@ export async function step05ImageToVideo(
     async (util) => {
       await preSleep();
       const result = await processA(full, util);
-      return {};
+      return { result };
     }
   );
   return { ...result, videoFilePath: result.meta.cachePrefix + "-vid.mp4" };

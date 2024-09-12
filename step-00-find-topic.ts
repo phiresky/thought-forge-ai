@@ -90,8 +90,9 @@ export async function step00FindTopic(
       config,
       statsCounter,
       seed,
-      iteration - 1
+      (i + 1) * 10
     );
+    topics.splice(0, topics.length - 10);
     previousResults.push({
       role: "assistant",
       content: [{ type: "text", text: JSON.stringify(topics, null, 2) }],
