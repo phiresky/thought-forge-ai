@@ -1,8 +1,8 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { CacheOrComputer } from "./util/api-cache";
-import { StatsCounter } from "./util/stats";
 import { MessageCreateParamsNonStreaming } from "@anthropic-ai/sdk/resources";
 import { FindTopicAiResponse } from "./step-00-find-topic";
+import { CacheOrComputer } from "./util/api-cache";
+import { StatsCounter } from "./util/stats";
 
 const PROMPT = `
 Craft a monologue or story based on the given topic. Orient yourself by the examples.
@@ -108,14 +108,14 @@ export async function step01WriteScript(
       },*/
     ],
   };
-  const data = (await apiFromCacheOr(
+  const data = await apiFromCacheOr(
     "https://fakeurl.anthropic.com/anthropic.messages.create",
     body,
     async () => {
       const msg = await anthropic.messages.create(body);
       return msg;
     }
-  ));
+  );
   const msg = data.data;
   console.log("meta", data.meta);
   statsCounter.api_calls += 1;

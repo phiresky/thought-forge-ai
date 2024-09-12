@@ -1,8 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { MessageCreateParamsNonStreaming } from "@anthropic-ai/sdk/resources";
 import { CacheOrComputer } from "./util/api-cache";
 import { StatsCounter } from "./util/stats";
-import { MessageCreateParamsNonStreaming } from "@anthropic-ai/sdk/resources";
-import { FindTopicAiResponse } from "./step-00-find-topic";
 
 const PROMPT = `
 You are a writer and director specializing in deep thought TikTok content. Your task is to generate an AI prompt for a music generation AI to create background music for a {{DURATION}}-second monologue. This music should enhance the emotional impact and complement the content of the monologue.
@@ -35,7 +34,7 @@ To create an effective AI prompt for background music, follow these steps:
 Output ONLY the AI prompt. Aim for a prompt of 3-5 sentences that clearly conveys the desired musical characteristics and how they should align with the monologue.
 `;
 
-export async function step07TextToMusicPrompt(
+export async function step06TextToMusicPrompt(
   apiFromCacheOr: CacheOrComputer,
   config: { ANTHROPIC_API_KEY?: string; ANTHROPIC_MODEL?: string },
   statsCounter: StatsCounter,

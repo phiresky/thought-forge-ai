@@ -1,7 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { MessageCreateParamsNonStreaming } from "@anthropic-ai/sdk/resources";
 import { CacheOrComputer } from "./util/api-cache";
 import { StatsCounter } from "./util/stats";
-import { MessageCreateParamsNonStreaming } from "@anthropic-ai/sdk/resources";
 
 const SYSTEM_PROMPT = `
 You are tasked with generating 10 topics for deep, insightful TikTok-style short video that resonates with many people but has a specific insight. This topic should be suitable for creating engaging, thought-provoking content that can capture viewers' attention quickly and leave a lasting impression.

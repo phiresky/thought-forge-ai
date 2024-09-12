@@ -1,28 +1,20 @@
+import "dotenv/config";
+import { promises as fs } from "fs";
 import { step00FindTopic as step00FindTopics } from "./step-00-find-topic";
 import { step01WriteScript as step01WriteMonologue } from "./step-01-write-monologue";
-import {
-  step02TextToSpeech,
-  TTSResponse,
-  TTSResponseFinal,
-} from "./step-02-text-to-speech";
+import { step02TextToSpeech, TTSResponseFinal } from "./step-02-text-to-speech";
 import { step03TextToImagePrompt } from "./step-03-text-to-image-prompt";
-import { step04TextToImage } from "./step-04-text-to-image";
-import { step05ImageToVideo } from "./step-05-image-to-video";
-import { step07TextToMusicPrompt as step06TextToMusicPrompt } from "./step-06-text-to-music-prompt";
+import { step06TextToMusicPrompt } from "./step-06-text-to-music-prompt";
 import { step07music } from "./step-07-music";
-import { step06ffmpeg as step08ffmpeg } from "./step-08-ffmpeg";
-import { subtitles } from "./step-09-subtitles";
-import { sleep } from "./util";
+import { step08subtitles } from "./step-08-subtitles";
+import { step09ffmpeg } from "./step-09-ffmpeg";
 import {
   alignSpeech,
   alignVideo,
-  ImageSpeechAlignment,
   ImageSpeechVideoAlignment,
 } from "./util/align-video";
 import { apiFromCacheOr } from "./util/api-cache";
 import { StatsCounter, zeroStatsCounter } from "./util/stats";
-import "dotenv/config";
-import { promises as fs } from "fs";
 
 function assertNonNull<T>(x: (T | null)[], e: string): asserts x is T[] {
   if (x.some((e) => e === null)) throw Error(e);
@@ -59,7 +51,7 @@ async function main() {
   await fs.writeFile(projectDir + "seed.json", JSON.stringify(seed, null, 2));
   console.log("writing monologue");
   // having cook in there sometimes makes the AI think it should be about cooking.
-  if(topic.voice === "cook") topic.voice = "kyana";
+  if (topic.voice === "cook") topic.voice = "kyana";
   const monologue = await step01WriteMonologue(
     apiFromCacheOr,
     config,
@@ -101,8 +93,8 @@ async function main() {
   ]);
 
   const subtitleFileName = projectDir + "subtitles" + ".ass";
-  await subtitles({ speech, outputFilename: subtitleFileName });
-  const res = await step08ffmpeg(apiFromCacheOr, {
+  await step08subtitles({ speech, outputFilename: subtitleFileName });
+  const res = await step09ffmpeg(apiFromCacheOr, {
     speech: speech.speechFileName,
     subtitles: subtitleFileName,
     music: music.musicFileName,
@@ -127,15 +119,12 @@ async function doVideo(
     iprompts,
     pauseAfterSeconds
   );
-  const _videoAlignments: PromiseSettledResult<ImageSpeechVideoAlignment>[] = await alignVideo(
-    alignment,
-    config,
-    projectDir
-  );
-  const videoAlignments = _videoAlignments.map(p => {
-    if(p.status === "fulfilled") return p.value;
+  const _videoAlignments: PromiseSettledResult<ImageSpeechVideoAlignment>[] =
+    await alignVideo(alignment, config, projectDir);
+  const videoAlignments = _videoAlignments.map((p) => {
+    if (p.status === "fulfilled") return p.value;
     else throw Error("at least one video failed to generate");
-  })
+  });
 
   console.log(videoAlignments);
   await fs.writeFile(
@@ -163,6 +152,7 @@ async function doMusic(
     monologue,
     musicDuration
   );
+  await fs.writeFile(projectDir + "music-prompt.txt", musicPrompt);
   const music = await step07music(
     apiFromCacheOr,
     config,

@@ -34,7 +34,7 @@ const stringifyTime = (time: number) => {
   return `${hours}:${minutes}:${seconds}.${milliseconds}`;
 };
 
-export async function subtitles(props: {
+export async function step08subtitles(props: {
   speech: TTSResponseFinal;
   outputFilename: string;
 }) {
