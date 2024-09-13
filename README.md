@@ -63,7 +63,7 @@ Apart from the video generation the whole process is pretty cheap ($0.7 per vide
 [s3eg]: ./data/examples/002%20Why%20Being%20'Weak'%20Is%20Actually%20Your%20Greatest%20Strength/alignments.json
 [s4eg]: ./data/examples/002%20Why%20Being%20'Weak'%20Is%20Actually%20Your%20Greatest%20Strength/0.00-6.235-img.jpg
 [s5eg]: ./data/examples/002%20Why%20Being%20'Weak'%20Is%20Actually%20Your%20Greatest%20Strength/0.00-6.235-vid.mp4
-[s6eg]: ./data/examples/002%20Why%20Being%20'Weak'%20Is%20Actually%20Your%20Greatest%20Strength/music-prompt.txt
+[s6eg]: ./data/examples/000%20The%201%25%20Change%20That%20Can%20Transform%20Your%20Life/music-prompt.txt
 [s7eg]: ./data/examples/002%20Why%20Being%20'Weak'%20Is%20Actually%20Your%20Greatest%20Strength/music.mp3
 [s8eg]: ./data/examples/002%20Why%20Being%20'Weak'%20Is%20Actually%20Your%20Greatest%20Strength/subtitles.ass
 [s9eg]: ./data/examples/002%20Why%20Being%20'Weak'%20Is%20Actually%20Your%20Greatest%20Strength/merged.mp4
