@@ -1,7 +1,10 @@
 import { promises as fs } from "node:fs";
 
 export type CacheResponse<T> = { meta: { cachePrefix: string }; data: T };
+
+// we pass this type in so we can create the apiFromCacheOr function with additional dependencies (like a DB)
 export type CacheOrComputer = <T>(
+  /** this url is purely used as part of the cache key so it does not need to point to anything real */
   api_url: string,
   api_body: unknown,
   call: (util: WriteUtil) => Promise<T>
@@ -20,12 +23,16 @@ async function digestMessage(message: string): Promise<string> {
 }
 export type WriteUtil = {
   cachePrefix: string;
+  /** write an additional file next to the cached file with the given suffix so it can be inspected directly in the FS */
   writeCompanion: (
-    filename: string,
+    filenameSuffix: string,
     data: string | Uint8Array
   ) => Promise<void>;
 };
 
+/**
+ * generic file system based caching for API calls so we can just run the program multiple times without doing duplicate calls
+ */
 export async function apiFromCacheOr<T>(
   api_url: string,
   api_body: unknown,

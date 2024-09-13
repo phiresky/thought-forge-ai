@@ -1,8 +1,7 @@
-import puppeteer, { Locator, Page, Puppeteer } from "puppeteer";
-import { CacheOrComputer, WriteUtil } from "./util/api-cache";
-import { setTimeout } from "timers";
 import p from "node:process";
+import puppeteer, { Locator, Page } from "puppeteer";
 import { sleep } from "./util";
+import { CacheOrComputer, WriteUtil } from "./util/api-cache";
 
 type P = {
   RUNWAY_USERNAME: string;
@@ -25,6 +24,9 @@ async function processA(props: P, util: WriteUtil): Promise<Result> {
     await browser.close();
   }
 }
+/**
+ * since they don't have an official API yet, this is a fairly fragile browser-based script
+ */
 async function processB(
   props: P,
   util: WriteUtil,

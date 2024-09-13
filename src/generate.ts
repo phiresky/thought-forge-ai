@@ -47,7 +47,7 @@ async function main() {
   await fs.writeFile(projectDir + "topic.json", JSON.stringify(topic, null, 2));
   await fs.writeFile(projectDir + "seed.json", JSON.stringify(seed, null, 2));
   console.log("writing monologue");
-  // having cook in there sometimes makes the AI think it should be about cooking.
+  // having cook in there sometimes makes the AI think it should be about cooking, but I don't want to change it to not bust the cache.
   if (topic.voice === "cook") topic.voice = "kyana";
   const monologue = await step01WriteMonologue(
     apiFromCacheOr,
@@ -77,6 +77,7 @@ async function main() {
   console.timeEnd("image prompts");
 
   const pauseAfterSeconds = 1;
+  // these can be done simultaneously
   const [videoAlignments, music] = await Promise.all([
     doVideo(projectDir, config, monologue, speech, iprompts, pauseAfterSeconds),
     doMusic(

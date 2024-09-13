@@ -1,5 +1,5 @@
-import { TTSResponse, TTSResponseFinal } from "./step-02-text-to-speech";
 import { promises as fs } from "fs";
+import { TTSResponseFinal } from "./step-02-text-to-speech";
 const HEADER = `[Script Info]
 Title: Default Aegisub file
 ScriptType: v4.00+
@@ -73,12 +73,18 @@ export async function step08subtitles(props: {
 }
 
 type Word = { text: string; start: number; end: number };
+/**
+ * we want each subtitle line to be max 7 words, so when it's longer split it between the two words where the spoken pause is the longest
+ */
 function maybeSplit(words: Word[]): Word[][] {
   if (words.length < 7) return [words];
   const minWordCount = 2;
   const words2 = words.map((w, i) => ({
     ...w,
-    gap: i >= minWordCount && i <= words.length - minWordCount ? w.end - words[i - 1]?.end : 0,
+    gap:
+      i >= minWordCount && i <= words.length - minWordCount
+        ? w.end - words[i - 1]?.end
+        : 0,
   }));
   const maxGap = Math.max(...words2.map((w) => w.gap));
   const splitInx = words2.findIndex((w) => w.gap === maxGap);
@@ -87,6 +93,7 @@ function maybeSplit(words: Word[]): Word[][] {
     ...maybeSplit(words.slice(splitInx)),
   ];
 }
+/** split script into lines based on sentence structure */
 function wordLineMerge(words: Word[]) {
   const lines = [];
   let sentence = [];

@@ -1,6 +1,8 @@
 import * as fal from "@fal-ai/serverless-client";
 import { CacheOrComputer } from "./util/api-cache";
 
+// we could use replicate.com here just as we do for music so we don't need an extra account
+
 export async function step04TextToImage(
   apiFromCacheOr: CacheOrComputer,
   config: {

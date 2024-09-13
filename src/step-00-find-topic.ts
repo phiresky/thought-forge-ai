@@ -3,7 +3,7 @@ import { MessageCreateParamsNonStreaming } from "@anthropic-ai/sdk/resources";
 import { CacheOrComputer } from "./util/api-cache";
 import { StatsCounter } from "./util/stats";
 
-const SYSTEM_PROMPT = `
+const PROMPT = `
 You are tasked with generating 10 topics for deep, insightful TikTok-style short video that resonates with many people but has a specific insight. This topic should be suitable for creating engaging, thought-provoking content that can capture viewers' attention quickly and leave a lasting impression.
 
 Guidelines for generating the TikTok topic:
@@ -71,6 +71,7 @@ export type FindTopicAiResponse = {
   voice: string;
 };
 
+// If count > 10, do multiple calls to get more topics
 export async function step00FindTopic(
   apiFromCacheOr: CacheOrComputer,
   config: { ANTHROPIC_API_KEY?: string; ANTHROPIC_MODEL?: string },
@@ -116,7 +117,7 @@ export async function step00FindTopic(
         content: [
           {
             type: "text",
-            text: SYSTEM_PROMPT,
+            text: PROMPT,
           },
         ],
       },

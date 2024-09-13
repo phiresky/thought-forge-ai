@@ -1,8 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
+import { MessageCreateParamsNonStreaming } from "@anthropic-ai/sdk/resources";
 import { CacheOrComputer } from "./util/api-cache";
 import { StatsCounter } from "./util/stats";
-import { MessageCreateParamsNonStreaming } from "@anthropic-ai/sdk/resources";
-import { FindTopicAiResponse } from "./step-00-find-topic";
 
 const PROMPT = `
 You are a director and producer specializing in deep thought TikTok content. Your task is to generate prompts for an image generation AI that will illustrate a given monologue. Follow these instructions carefully:

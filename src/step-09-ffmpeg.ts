@@ -3,6 +3,9 @@ import { promisify } from "node:util";
 import { ImageSpeechAlignment } from "./util/align-video";
 import { CacheOrComputer } from "./util/api-cache";
 
+/**
+ * in order to do proper perceived loudness normalization we need to do two passes, first one to measure the loudness
+ */
 async function getLoudnessTarget(
   fileName: string,
   p: { i: number; lra: number; tp: number }
@@ -50,12 +53,12 @@ export async function step09ffmpeg(
     async (util) => {
       // https://k.ylo.ph/2016/04/04/loudnorm.html
       const speechLoudness = await getLoudnessTarget(data.speech, {
-        i: -16,
+        i: -16, // fairly loud speech
         lra: 11,
         tp: -1,
       });
       const musicLoudness = await getLoudnessTarget(data.music, {
-        i: -25,
+        i: -25, // more quiet music
         lra: 7,
         tp: -2,
       });
@@ -64,17 +67,20 @@ export async function step09ffmpeg(
       let filter = data.alignment
         .map((e, i) => {
           const length = e.endSeconds - e.startSeconds;
+          // if video is shorter than segment, slow it down
+          // cut video to length of speech segment
           const setpts = length > 10 ? `${length / 10}*PTS` : `PTS`;
           return `[${i + audioCount}:v]trim=0.00:${length.toFixed(
             3
           )},setpts=${setpts}[v${i}]; `;
         })
         .join("");
-      const inputWidth = 1280;
+      // const inputWidth = 1280;
       const outputWidth = 900;
       const outputRatio = 4 / 5;
       const outputHeight = Math.round(outputWidth / outputRatio);
       const outputPaddingTop = 0.1 * outputHeight;
+      // concat videos, crop to a 5:4 aspect ratio (semi-vertical video), pad with black bars at top and bottom to fit subtitles
       const escapedSubtitleFilename = data.subtitles.replace(/'/g, "\\\\\\'");
       filter +=
         data.alignment.map((e, i) => `[v${i}]`).join("") +
@@ -89,6 +95,7 @@ export async function step09ffmpeg(
         filter,
         "-filter_complex",
         // need to make the speech stereo first otherwise output will be mono
+        // fade out music in last second
         `[0:a][0:a]amerge=inputs=2[spmono]; [spmono]${speechLoudness}[speech]; [1:a]${musicLoudness}[music]; [speech][music]amix=inputs=2,afade=type=out:start_time=${fadeOutStart}:duration=1[audio]`,
         "-map",
         "[videocrop]",

@@ -1,7 +1,7 @@
-import { ElevenLabsClient, ElevenLabs } from "elevenlabs";
+import { ElevenLabs, ElevenLabsClient } from "elevenlabs";
+import { FindTopicAiResponse } from "./step-00-find-topic";
 import { CacheOrComputer, CacheResponse } from "./util/api-cache";
 import { StatsCounter } from "./util/stats";
-import { FindTopicAiResponse } from "./step-00-find-topic";
 
 export type TTSResponse = {
   audio_base64: string;
