@@ -1,6 +1,6 @@
 # thought-forge-ai
 
-Generate 30-60 second "deep thought" TikTok-style video including a monologue, moving video scenes, music, and subtitles.
+An experiment in generating 30-60 second "deep thought" TikTok-style video including a spoken monologue, moving video scenes, music, and subtitles.
 
 Examples: (make sure to turn on audio, GitHub mutes by default)
 
@@ -14,15 +14,19 @@ Some more examples are in [./data/examples](./data/examples).
 
 ## Background / Motivation
 
-I've recently seen a fair amount of "philosophical" and story-telling content on social media. Common traits are a calm voice, soothing music, calm pictures and a discussion of some topic of self-improvement, or love, or the world and our place in it. I enjoy this content which the algorithms have noticed.
+I've recently seen a fair amount of "philosophical" and story-telling content on social media. Common traits are a calm voice, soothing music, calm pictures and a discussion of some topic of self-improvement, or love, or the world and our place in it. The algorithms have noticed that I sometimes enjoy this content.
 
-Some of this type of content has clearly AI-generated elements, for example using the same voice or images that are slightly off. So I wondered how hard it would be to create similar content in a 100% automated manner. Turns out, it's pretty easy. It's also pretty hilarious to create thoughtful content about human struggles in modern life fully with AI.
+Some of this type of content has clearly AI-generated elements, for example using the same voice or images that are slightly off. So I wondered how hard it would be to create similar content in a 100% automated manner.
+
+Turns out, it's pretty easy. I also think it's pretty hilarious to create thoughtful content about human struggles in modern life fully with AI.
 
 ## Quality and Future Work
 
 Sometimes the quality is surprisingly good, both in the topic and structure as well as the video. Mostly it is somewhat mediocre.
 
-I think the output could be improved a bit with better prompts, and significantly with more cherry-picking or using (human) source material or at least inspiration.
+I think the output could be improved a bit with better prompts, and significantly with more cherry-picking or using (human) source material or at least inspiration. It currently also doesn't generate first-person personal stories which I might add later.
+
+I've also noticed that LLM is more deterministic than I thought. Even with temperature 1 it kept generating the same or similar topics, so I had to add the previous topics into the context. The same happens for the monologues, they often have too similar content, probably they would also need context of previous texts in order to generate more different content.
 
 ## Steps and Tools
 
@@ -70,3 +74,13 @@ Apart from the video generation the whole process is pretty cheap ($0.7 per vide
 [^4]: $0.05 per image, ~7 images per video
 [^5]: 100 credits for 10 seconds of video, $1 for 100 credits. For 60 seconds $6. Unlimited generation for $80/month.
 [^6]: on replicate.com around 2min of one A100 80GB at $5/hour makes ~$0.17
+
+## Setup / Running
+
+Install the dependencies using `pnpm install`. You can get pnpm by running `corepack enable`, which comes with node.
+
+Copy the `.env.example` file to `.env` and add all the needed API keys. This is going to be pretty annoying since it needs five independent accounts most of them with payment set up.
+
+Generate a list of 40 topics using `pnpm generate`.
+
+Choose a topic from that list to generate a full video for using `pnpm generate 12`. This will take a few minutes, depending mainly on the speed of the video AI.

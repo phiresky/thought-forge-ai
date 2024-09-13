@@ -16,9 +16,6 @@ import {
 import { apiFromCacheOr } from "./util/api-cache";
 import { StatsCounter, zeroStatsCounter } from "./util/stats";
 
-function assertNonNull<T>(x: (T | null)[], e: string): asserts x is T[] {
-  if (x.some((e) => e === null)) throw Error(e);
-}
 async function main() {
   const statsCounter = zeroStatsCounter();
   const config = process.env as any;
@@ -123,7 +120,7 @@ async function doVideo(
     await alignVideo(alignment, config, projectDir);
   const videoAlignments = _videoAlignments.map((p) => {
     if (p.status === "fulfilled") return p.value;
-    else throw Error("at least one video failed to generate");
+    else throw Error("at least one video failed to generate: " + p.reason);
   });
 
   console.log(videoAlignments);
