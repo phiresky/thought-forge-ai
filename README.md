@@ -26,7 +26,7 @@ Sometimes the quality is surprisingly good, both in the topic and structure as w
 
 I think the output could be improved a bit with better prompts, and significantly with more cherry-picking or using (human) source material or at least inspiration. It currently also doesn't generate first-person personal stories which I might add later.
 
-I've also noticed that LLM is more deterministic than I thought. Even with temperature 1 it kept generating the same or similar topics, so I had to add the previous topics into the context. The same happens for the monologues, they often have too similar content, probably they would also need context of previous texts in order to generate more different content.
+I've also noticed that the LLM is more deterministic than I thought. Even with temperature 1 it kept generating the same or similar topics, so I had to add the previous topics into the context. The same happens for the monologues, they often have too similar content, probably they would also need context of previous texts in order to generate more different content.
 
 ## Steps and Tools
 
@@ -43,7 +43,7 @@ This project uses a combination of tools together with custom written code:
 | 6    | Create music prompt                                                          | LLM (Claude 3.5)                      | $0.01                    | Llama 3.1                                   | [step-06-text-to-music-prompt.ts][s6src] | [music-prompt.txt][s6eg] |
 | 7    | Create music from prompt                                                     | Text to Audio (MusicGen)              | $0.17[^6]                | MusicGen self-hosted                        | [step-07-music.ts][s7src]                | [music.mp3][s7eg]        |
 | 8    | Create subtitles for burn in                                                 | None                                  | $0                       | -                                           | [step-08-subtitles.ts][s8src]            | [subtitles.ass][s8eg]    |
-| 9    | Merge and cut video, normalize loudness and merge audio, burn in subtitles   | ffmpeg                                | $0                       | -                                           | [step-09-ffmpeg.ts](s9src)               | [merged.mp4][s9eg]       |
+| 9    | Merge and cut video, normalize loudness and merge audio, burn in subtitles   | ffmpeg                                | $0                       | -                                           | [step-09-ffmpeg.ts][s9src]               | [merged.mp4][s9eg]       |
 
 Apart from the video generation the whole process is pretty cheap ($0.7 per video). The video generation is both the most enticing part and also the worst (wrt API and quality). I assume this will change in the coming months.
 
