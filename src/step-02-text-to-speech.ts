@@ -39,6 +39,7 @@ export async function step02TextToSpeech(
     stone: "NFG5qt843uXKj4pFvR7C",
     kyana: "3wZbmt7q1ZGa1v0w9nvu",
     afriba: "mNOhSS5ycP9b0Evtoi2U",
+    rbbrelax: "7u4kUAtqvyfzaPCZV0V5",
   }[topic.voice];
   if (!voice) throw Error(`voice ${voice} not found`);
   const body: {

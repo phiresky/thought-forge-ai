@@ -81,7 +81,9 @@ export async function step09ffmpeg(
       const outputHeight = Math.round(outputWidth / outputRatio);
       const outputPaddingTop = 0.1 * outputHeight;
       // concat videos, crop to a 5:4 aspect ratio (semi-vertical video), pad with black bars at top and bottom to fit subtitles
-      const escapedSubtitleFilename = data.subtitles.replace(/'/g, "\\\\\\'");
+      const escapedSubtitleFilename = data.subtitles
+        .replace(/'/g, "\\\\\\'")
+        .replace(/,/g, "\\,");
       filter +=
         data.alignment.map((e, i) => `[v${i}]`).join("") +
         `concat=n=${data.alignment.length}:v=1:a=0[video]; [video]crop=w=${outputWidth},pad=h=${outputHeight}:y=${outputPaddingTop},subtitles=filename=${escapedSubtitleFilename}[videocrop]`;

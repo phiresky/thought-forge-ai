@@ -77,6 +77,46 @@ You know what your problem is? You're smart. Too smart. You overthink because yo
 </monologue>
 `;
 
+const STORY_PROMPT = `
+Craft a story based on the given topic. It should be 30-50 seconds (approximately 60-120 words). Orient yourself by the examples. Be emotional, heartfelt, tragic. Leave some things unsaid.
+
+The topic for your monologue is:
+<topic>
+{{TOPIC}}
+</topic>
+
+Output purely the story, nothing else.
+
+Here is some example stories for reference:
+
+<monologue>
+To realise it one day. That happiness was never about your job or your degree or being in a relationship. Happiness was never about following in the footsteps of all of those who came before you. It was never about being like the others. One day you're going to see it. That happiness was always about the discovery, the hope, the listening to your heart and following it wherever it chose to go. Happiness was always about being kinder to yourself. It was always about embracing the person you were becoming. One day you will understand that happiness was always about learning how to live with yourself. That your happiness was never in the hands of others. One day you'll realise the true happiness comes from within and no external factors can define it was always about you. It was always about you. This comes from within and no external factors can define it.
+</monologue>
+
+<monologue>
+Regard yourself as dead already, so that you have nothing to lose. Turkish proverb says he who sleeps on the floor will not fall out of bed. So in the same way, the person who regards himself as already dead, who. Therefore you are virtually nothing. 100 years from now, you'll be a handful of dust. That'll be for real, alright. Act on that reality. And out of that nothing, you will suddenly surprise yourself that the more you know you're nothing, the more you'll amount to something.
+</monologue>
+
+<monologue>
+If I ever say I love you more, I don't just mean I love you more than you love me. I mean, I love you more than all the bad days ahead of us. I mean, I love you more than any distance between us. I love you more than any person who tries to get between us. I love you more than any fight we ever have. I love you more than any imperfection you think you have. I mean, I love you more than I love myself. I mean, I love you more than everything.
+</monologue>
+
+<monologue>
+I'm paradoxical. I like to be happy, but I think about sad things all the time. I don't really like myself, but I love the person I've become. I say I don't care, but I just care too much. Deep into my bones, I crave attention, yet I reject everything that comes my way. I healed people, but I broke my own heart trying to fix them. I love to listen, but I never tell them what's inside me. A living contradiction, that's what I am.
+</monologue>
+
+<monologue>
+She guessed my favourite colour on the first try, but between you and me, I didn't even have a favourite colour until she yelled out yellow! She was excited and smiling like a little kid. So I told her she was right and I haven't seen yellow the same since. It's in everything. I could probably live in it now. She is the most beautiful pattern of beauty on the fabric of love. She is a poem and a painting too. Everything she said sounded like a song, and every silence was music. She is an old soul with young eyes, a vintage heart and a beautiful mind.
+</monologue>
+
+<monologue>
+When two souls are destined to be together, they are connected by an invisible thread. No matter the time, place or situation, this thread may stretch or tangle, but it will never break. If a man ever loses his loved one, he will search for her and everyone he meets. If you can't sleep at night, it's because you're awake in someone else's dreams. The sun and the moon yearn for each other, but time keeps them apart. So god painted the skies with eclipses, proving that even the most improbable love can unite. You are the face of who you loved most in your past life. When our eyes meet, the whole world falls silent and time stands still. Nothing else exists apart from you and me when our eyes meet. If you feel like you're losing everything, remember trees lose their leaves every year. Yet they still stand tall and wait for better days to come.
+</monologue>
+
+<monologue>
+I sat with my anger long enough until it told me it's real name was grief. I'm not a whole person and I don't think I will ever be. Parts of me died in the house I grew up in and I visit them in dreams. When you are not fed love on a silver spoon, you learn to lick it off knives. Your anger is the part of you that knows your mistreatment and abuse are unacceptable. Your anger knows you deserve to be treated well and with kindness. Anger is important. It needs to be expressed, acted out, and vocalized. When it doesn't, it begins to manifest to rage.
+</monologue>`;
+
 export async function step01WriteScript(
   apiFromCacheOr: CacheOrComputer,
   config: { ANTHROPIC_API_KEY?: string; ANTHROPIC_MODEL?: string },

@@ -16,36 +16,66 @@ import {
 import { apiFromCacheOr } from "./util/api-cache";
 import { StatsCounter, zeroStatsCounter } from "./util/stats";
 
+const outRoot = `data/videos`;
 async function main() {
   const statsCounter = zeroStatsCounter();
   const config = process.env as any;
-  const seed = 1352242560; // (Math.random() * Number.MAX_SAFE_INTEGER) | 0;
-  const maxVideos = 40;
-  const topics = await step00FindTopics(
-    apiFromCacheOr,
-    config,
-    statsCounter,
-    seed,
-    maxVideos
-  );
-  console.log(
-    "topics:\n",
-    topics
-      .map(
-        (p, i) => `Topic ${i}: ${p.clickbait_title} (${p.topic}) (${p.voice})`
-      )
-      .join("\n")
-  );
-  const choice = +process.argv[2];
-  if (isNaN(choice)) throw Error("no topic chosen");
-  const topic = topics[choice];
-  console.log("chosen topic", choice, topic);
-  const projectDir = `data/videos/${choice
+  const task = process.argv[2];
+  if (task === "generate-topics") {
+    const seed = 1352242560; // (Math.random() * Number.MAX_SAFE_INTEGER) | 0;
+    const maxVideos = 40;
+    const topics = await step00FindTopics(
+      apiFromCacheOr,
+      config,
+      statsCounter,
+      seed,
+      maxVideos
+    );
+    console.log(
+      "topics:\n",
+      topics
+        .map(
+          (p, i) => `Topic ${i}: ${p.clickbait_title} (${p.topic}) (${p.voice})`
+        )
+        .join("\n")
+    );
+
+    const choice = +process.argv[3];
+    if (isNaN(choice)) throw Error("no topic chosen");
+    const topic = topics[choice];
+    console.log("chosen topic", choice, topic);
+    await generateVideo(choice, topic, config, statsCounter, seed);
+  } else if (task === "from-topic") {
+    const topic = process.argv[3];
+    if (!topic) throw Error("no topic");
+    await generateVideo(
+      await chooseFolderIndex(outRoot, 101),
+      {
+        clickbait_title: topic,
+        topic,
+        voice: "ocean",
+      },
+      config,
+      statsCounter
+    );
+  } else {
+    throw Error("unknown task");
+  }
+}
+async function generateVideo(
+  choice: number,
+  topic: { clickbait_title: string; voice: string; topic: string },
+  config: any,
+  statsCounter: StatsCounter,
+  seed = 0
+) {
+  const projectDir = `${outRoot}/${choice
     .toString()
     .padStart(3, "0")} ${topic.clickbait_title.replace(/\//g, "")}/`;
   await fs.mkdir(projectDir, { recursive: true });
   await fs.writeFile(projectDir + "topic.json", JSON.stringify(topic, null, 2));
-  await fs.writeFile(projectDir + "seed.json", JSON.stringify(seed, null, 2));
+  if (seed)
+    await fs.writeFile(projectDir + "seed.json", JSON.stringify(seed, null, 2));
   console.log("writing monologue");
   // having cook in there sometimes makes the AI think it should be about cooking, but I don't want to change it to not bust the cache.
   if (topic.voice === "cook") topic.voice = "kyana";
@@ -161,3 +191,16 @@ async function doMusic(
   return music;
 }
 void main();
+
+async function chooseFolderIndex(dir: string, start: number) {
+  const l = new Set(
+    (await fs.readdir(dir)).flatMap((x) => {
+      const n = x.match(/^\d+/);
+      if (!n) return [];
+      return [+n[0]];
+    })
+  );
+  for (let i = start; ; i++) {
+    if (!l.has(i)) return i;
+  }
+}

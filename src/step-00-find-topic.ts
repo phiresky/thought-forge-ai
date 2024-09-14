@@ -63,6 +63,12 @@ Output 10 different topics. Output example:
 
 export type FindTopicAiResponse = {
   topic: string;
+  clickbait_title: string;
+  voice: string;
+};
+
+export type FindTopicAiResponseFull = {
+  topic: string;
   key_insight: string;
   relevance: string;
   potential_impact: string;
