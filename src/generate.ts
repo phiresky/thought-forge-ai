@@ -43,7 +43,6 @@ async function main() {
     const choice = +process.argv[3];
     if (isNaN(choice)) throw Error("no topic chosen");
     const topic = topics[choice];
-    console.log("chosen topic", choice, topic);
     await generateVideo(choice, topic, config, statsCounter, seed);
   } else if (task === "from-topic") {
     const topic = process.argv[3];
@@ -69,6 +68,7 @@ async function generateVideo(
   statsCounter: StatsCounter,
   seed = 0
 ) {
+  console.log("chosen topic", choice, topic);
   const projectDir = `${outRoot}/${choice
     .toString()
     .padStart(3, "0")} ${topic.clickbait_title.replace(/\//g, "")}/`;

@@ -138,7 +138,7 @@ export async function step01WriteScript(
         content: [
           {
             type: "text",
-            text: PROMPT.replace("{{TOPIC}}", JSON.stringify(topic, null, 2)),
+            text: PROMPT.replace("{{TOPIC}}", topic.topic),
           },
         ],
       },
